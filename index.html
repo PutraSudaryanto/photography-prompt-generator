@@ -118,8 +118,8 @@
                         <label for="char-gender" class="block text-sm font-medium mb-2 text-emerald-600">Jenis Kelamin</label>
                         <select id="char-gender" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 custom-select">
                             <option value="">-- Pilih Jenis Kelamin --</option>
-                            <option value="man">Pria</option>
-                            <option value="woman">Wanita</option>
+                            <option value="pria">Pria</option>
+                            <option value="wanita">Wanita</option>
                         </select>
                     </div>
                     <div class="md:col-span-2">
@@ -440,8 +440,8 @@
         }
         
         async function callGeminiAPI(prompt, apiKey, jsonSchema = null) {
-            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-            const payload = { 
+             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+             const payload = { 
                 contents: chatHistory,
                 generationConfig: {}
              };
@@ -591,7 +591,15 @@
             }
         }
 
-        function generatePrompt() {
+        async function generatePrompt() {
+            const userApiKey = geminiApiKeyEl.value.trim();
+            if (!userApiKey) {
+                flashError(geminiApiKeyEl, "Kunci API wajib diisi untuk menerjemahkan!");
+                apiKeyError.classList.remove('hidden');
+                return;
+            }
+            apiKeyError.classList.add('hidden');
+
             const overallDesc = overallDescEl.value.trim();
             const charFields = {
                 name: document.getElementById('char-name').value.trim(),
@@ -603,17 +611,7 @@
                 action: document.getElementById('char-action').value.trim(),
             };
             
-            let base_en = [charFields.age, charFields.gender, charFields.nationality].filter(Boolean).join(' ');
-            let subjectEN = base_en ? `${base_en} character` : 'a character';
-            if (charFields.name) subjectEN += ` named ${charFields.name}`;
-            
-            let details_en = [];
-            if (charFields.features) details_en.push(`with ${charFields.features}`);
-            if (charFields.clothing) details_en.push(`wearing ${charFields.clothing}`);
-            if (charFields.action) details_en.push(charFields.action);
-            if (details_en.length > 0) subjectEN += `, ${details_en.join(', ')}`;
-            
-            let subjectID = `Seorang karakter ${charFields.gender ? (charFields.gender === 'man' ? 'pria' : 'wanita') : ''} ${charFields.nationality || ''} ${charFields.age || ''} ${charFields.name ? `bernama ${charFields.name}`: ''}`.replace(/\s+/g, ' ').trim();
+            let subjectID = `Seorang karakter ${charFields.gender || ''} ${charFields.nationality || ''} ${charFields.age || ''} ${charFields.name ? `bernama ${charFields.name}`: ''}`.replace(/\s+/g, ' ').trim();
             let details_id = [];
             if(charFields.features) details_id.push(`dengan ${charFields.features}`);
             if(charFields.clothing) details_id.push(`mengenakan ${charFields.clothing}`);
@@ -621,45 +619,50 @@
             if(details_id.length > 0) subjectID += `, ${details_id.join(', ')}`;
 
             const sceneText = document.getElementById('scene').value.trim();
-            let mainSubjectEN = charFields.name || charFields.gender ? subjectEN : '';
             let mainSubjectID = charFields.name || charFields.gender ? subjectID : '';
 
             if (sceneText) {
-                if (mainSubjectEN) mainSubjectEN = `${mainSubjectEN} in ${sceneText}`; else mainSubjectEN = sceneText;
                 if (mainSubjectID) mainSubjectID = `${mainSubjectID} di ${sceneText}`; else mainSubjectID = sceneText;
             }
             
-            const finalSubjectEN = overallDesc ? `${overallDesc} of ${mainSubjectEN}` : mainSubjectEN;
             const finalSubjectID = overallDesc ? `${overallDesc} dari ${mainSubjectID}` : mainSubjectID;
 
-            const promptPartsEN_desc = [finalSubjectEN].filter(Boolean);
             const promptPartsID_desc = [finalSubjectID].filter(Boolean);
 
             const detailsText = document.getElementById('details').value.trim();
             if (detailsText) {
-                promptPartsEN_desc.push(detailsText);
                 promptPartsID_desc.push(detailsText);
             }
 
-            document.querySelectorAll('#style, #lighting, #composition, #camera, #resolution, #shot-style, #camera-angle, #focus').forEach(el => {
+            document.querySelectorAll('#style, #lighting, #shot-style, #camera-angle, #focus, #camera, #resolution').forEach(el => {
                 if (el.value) {
-                    promptPartsEN_desc.push(el.value);
                     const selectedText = el.options[el.selectedIndex].text;
                     promptPartsID_desc.push(selectedText);
                 }
             });
 
-            promptPartsEN_desc.push("hyper-detailed, high quality, sharp focus");
             promptPartsID_desc.push("sangat detail, kualitas tinggi, fokus tajam");
 
             let finalIdPrompt = promptPartsID_desc.join(', ');
-            let finalEnPrompt = promptPartsEN_desc.join(', ');
-
             outputIdEl.value = finalIdPrompt;
-            outputEnEl.value = finalEnPrompt;
-            resultsContainer.classList.add('visible');
-            optimizationResultsContainer.classList.remove('visible'); // Hide optimization results on new generation
-            toggleActionButtonsVisibility();
+            
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Menerjemahkan...';
+
+            try {
+                const translationPrompt = `Translate the following descriptive photo prompt to English. The translation should be natural and suitable for an AI image generator. Only return the translated prompt. Original: "${finalIdPrompt}"`;
+                const finalEnPrompt = await callGeminiAPI(translationPrompt, userApiKey);
+                outputEnEl.value = finalEnPrompt;
+            } catch (error) {
+                console.error("Translation Error:", error);
+                outputEnEl.value = "Gagal menerjemahkan. Silakan coba lagi.";
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Buat Prompt!';
+                resultsContainer.classList.add('visible');
+                optimizationResultsContainer.classList.remove('visible');
+                toggleActionButtonsVisibility();
+            }
         }
         
         function clearFields() {
