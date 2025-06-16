@@ -147,14 +147,24 @@
                             <option value="">-- Pilih Gaya --</option>
                             <option value="photorealistic">Fotografi Realistis</option>
                             <option value="cinematic still">Sinematik</option>
+                            <option value="street photography">Fotografi Jalanan</option>
+                            <option value="epic landscape photography">Pemandangan Epik</option>
+                            <option value="studio portrait">Potret Studio</option>
+                            <option value="vintage film photo">Foto Film Vintage</option>
+                            <option value="black and white photography">Hitam Putih Dramatis</option>
+                            <option value="surrealism">Surealisme</option>
                         </select>
                     </div>
                     <div>
                         <label for="lighting" class="block text-sm font-medium mb-2 text-purple-600">Pencahayaan</label>
                         <select id="lighting" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
                             <option value="">-- Pilih Pencahayaan --</option>
-                            <option value="golden hour lighting">Golden Hour</option>
-                            <option value="dramatic lighting">Cahaya Dramatis</option>
+                            <option value="golden hour lighting">Golden Hour (Senja/Pagi)</option>
+                            <option value="dramatic lighting, hard shadows">Cahaya Dramatis, Bayangan Tajam</option>
+                            <option value="soft window light">Cahaya Jendela Lembut</option>
+                            <option value="neon lighting, vibrant colors">Lampu Neon, Warna-warni</option>
+                            <option value="moody, low-key lighting">Moody, Gelap</option>
+                            <option value="backlit silhouette">Siluet (Backlit)</option>
                         </select>
                     </div>
                     <div>
@@ -163,14 +173,21 @@
                             <option value="">-- Pilih Komposisi --</option>
                             <option value="extreme close-up shot">Extreme Close-up</option>
                             <option value="medium shot">Medium Shot</option>
+                            <option value="full body shot, wide angle">Wide Shot (Full Body)</option>
+                            <option value="low angle shot">Sudut Rendah (Low Angle)</option>
+                            <option value="high angle shot">Sudut Tinggi (High Angle)</option>
+                            <option value="rule of thirds">Aturan Sepertiga (Rule of Thirds)</option>
                         </select>
                     </div>
                     <div>
                         <label for="camera" class="block text-sm font-medium mb-2 text-purple-600">Kamera & Lensa</label>
                         <select id="camera" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
                             <option value="">-- Pilih Kamera/Lensa --</option>
-                            <option value="shot on DSLR, 50mm f/1.8 lens">DSLR, Lensa 50mm</option>
-                            <option value="shot on analog film">Film Analog</option>
+                            <option value="shot on DSLR, 50mm f/1.8 lens, shallow depth of field">DSLR, Lensa 50mm f/1.8 (Bokeh)</option>
+                            <option value="shot on analog film, Kodak Portra 400, film grain">Film Analog (Kodak Portra 400)</option>
+                            <option value="telephoto lens, compressed background">Lensa Telefoto</option>
+                            <option value="shot on iPhone, candid style">Gaya Candid (iPhone)</option>
+                            <option value="drone shot, aerial view">Drone (Aerial View)</option>
                         </select>
                     </div>
                     <div>
@@ -179,6 +196,8 @@
                             <option value="">-- Pilih Resolusi --</option>
                             <option value="--ar 16:9">Rasio Aspek 16:9</option>
                             <option value="--ar 9:16">Rasio Aspek 9:16</option>
+                            <option value="--ar 1:1">Rasio Aspek 1:1 (Persegi)</option>
+                            <option value="--ar 4:3">Rasio Aspek 4:3 (Klasik)</option>
                         </select>
                     </div>
                 </div>
@@ -186,13 +205,13 @@
         </div>
 
         <div class="flex justify-center items-center space-x-4 mt-10 mb-6">
-            <button id="clear-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-8 rounded-full text-lg transform hover:scale-105 transition-all duration-300 hidden">
+            <button id="clear-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-8 rounded-full text-base transform hover:scale-105 transition-all duration-300 hidden">
                 Hapus Isian
             </button>
-            <button id="generate-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+            <button id="generate-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-base shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300">
                 Buat Prompt!
             </button>
-            <button id="optimize-btn" title="Optimalkan Prompt" class="flex items-center bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full text-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 hidden">
+            <button id="optimize-btn" title="Optimalkan Prompt" class="flex items-center bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full text-base shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 hidden">
                 <svg id="optimize-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
                 <span id="optimize-btn-text">Optimalkan</span>
                 <svg id="optimize-loader" class="animate-spin h-5 w-5 mr-2 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
