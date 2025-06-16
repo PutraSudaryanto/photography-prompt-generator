@@ -480,6 +480,7 @@
             const originalPlaceholder = element.placeholder;
             element.placeholder = message;
             element.classList.add('border-red-500', 'focus:border-red-500');
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             setTimeout(() => {
                  element.placeholder = originalPlaceholder;
                  element.classList.remove('border-red-500', 'focus:border-red-500');
@@ -595,12 +596,17 @@
             const userApiKey = geminiApiKeyEl.value.trim();
             if (!userApiKey) {
                 flashError(geminiApiKeyEl, "Kunci API wajib diisi untuk menerjemahkan!");
-                apiKeyError.classList.remove('hidden');
+                apiKeyError.classList.add('hidden');
                 return;
             }
             apiKeyError.classList.add('hidden');
 
             const overallDesc = overallDescEl.value.trim();
+            if (!overallDesc) {
+                flashError(overallDescEl, "Deskripsi foto wajib diisi!");
+                return;
+            }
+            
             const charFields = {
                 name: document.getElementById('char-name').value.trim(),
                 nationality: document.getElementById('char-nationality').value.trim(),
@@ -635,13 +641,13 @@
             }
 
             document.querySelectorAll('#style, #lighting, #shot-style, #camera-angle, #focus, #camera, #resolution').forEach(el => {
-                if (el.value) {
+                if (el.options && el.selectedIndex > 0) {
                     const selectedText = el.options[el.selectedIndex].text;
                     promptPartsID_desc.push(selectedText);
                 }
             });
 
-            promptPartsID_desc.push("sangat detail, kualitas tinggi, fokus tajam");
+            // promptPartsID_desc.push("sangat detail, kualitas tinggi, fokus tajam");
 
             let finalIdPrompt = promptPartsID_desc.join(', ');
             outputIdEl.value = finalIdPrompt;
