@@ -3,7 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Photography Prompt Generator (Dwibahasa)</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>AI Prompt Generator untuk Fotografi & Seni | Buat Prompt Canggih</title>
+    <meta name="description" content="Generator prompt AI canggih untuk fotografi, seni digital, dan Midjourney. Buat prompt sinematik dan artistik dengan mudah menggunakan fitur Ideasi Cepat dan Optimasi Prompt.">
+    <meta name="keywords" content="AI prompt generator, generator prompt AI, fotografi AI, seni digital, Midjourney prompt, rekayasa prompt, prompt engineering, alat bantu AI, generator prompt dwibahasa">
+    
+    <!-- Open Graph / Facebook Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AI Prompt Generator untuk Fotografi & Seni | Buat Prompt Canggih">
+    <meta property="og:description" content="Generator prompt AI canggih untuk fotografi, seni digital, dan Midjourney. Buat prompt sinematik dan artistik dengan mudah menggunakan fitur Ideasi Cepat dan Optimasi Prompt.">
+    <meta property="og:image" content="https://placehold.co/1200x630/1d232a/ffffff?text=AI+Prompt+Generator">
+    <meta property="og:url" content="https://putra.ommu.id/veo3-prompt-generator/">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Prompt Generator untuk Fotografi & Seni | Buat Prompt Canggih">
+    <meta name="twitter:description" content="Generator prompt AI canggih untuk fotografi, seni digital, dan Midjourney. Buat prompt sinematik dan artistik dengan mudah menggunakan fitur Ideasi Cepat dan Optimasi Prompt.">
+    <meta name="twitter:image" content="https://placehold.co/1200x630/1d232a/ffffff?text=AI+Prompt+Generator">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +53,7 @@
             overflow: hidden;
         }
         #results-container.visible, #optimization-results-container.visible {
-            max-height: 500px; /* Adjust as needed */
+            max-height: 1000px; /* Adjust as needed */
             opacity: 1;
         }
     </style>
@@ -277,20 +295,62 @@
 
                 <!-- Optimization Results -->
                 <div id="optimization-results-container">
-                     <h4 class="text-base font-semibold text-slate-700 mb-2">Versi Optimasi</h4>
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-6">
                         <div>
-                            <label for="optimized-output-id" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Indonesia</label>
-                            <div class="relative">
-                                <textarea id="optimized-output-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
-                                <button id="copy-optimized-btn-id" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                            <h4 class="text-base font-semibold text-slate-700 mb-2">Versi Optimasi</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="optimized-output-id" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Indonesia</label>
+                                    <div class="relative">
+                                        <textarea id="optimized-output-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
+                                        <button id="copy-optimized-btn-id" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="optimized-output-en" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Inggris (untuk AI)</label>
+                                    <div class="relative">
+                                        <textarea id="optimized-output-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                                        <button id="copy-optimized-btn-en" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div>
-                            <label for="optimized-output-en" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Inggris (untuk AI)</label>
-                            <div class="relative">
-                                <textarea id="optimized-output-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
-                                <button id="copy-optimized-btn-en" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                            <h4 class="text-base font-semibold text-slate-700 mb-2">Saran Kreatif dari Gemini</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="creative-suggestion-id" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Indonesia</label>
+                                    <div class="relative">
+                                        <textarea id="creative-suggestion-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
+                                        <button id="copy-creative-suggestion-id" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="creative-suggestion-en" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Inggris (untuk AI)</label>
+                                    <div class="relative">
+                                        <textarea id="creative-suggestion-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                                        <button id="copy-creative-suggestion-en" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-base font-semibold text-slate-700 mb-2">Prompt Fotografi Final</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="final-prompt-id" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Indonesia</label>
+                                    <div class="relative">
+                                        <textarea id="final-prompt-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
+                                        <button id="copy-final-prompt-id" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="final-prompt-en" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Inggris (untuk AI)</label>
+                                    <div class="relative">
+                                        <textarea id="final-prompt-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                                        <button id="copy-final-prompt-en" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -358,6 +418,18 @@
         const copyOptimizedIdBtn = document.getElementById('copy-optimized-btn-id');
         const optimizedOutputEnEl = document.getElementById('optimized-output-en');
         const copyOptimizedEnBtn = document.getElementById('copy-optimized-btn-en');
+
+        // New elements for creative suggestion and final prompt
+        const creativeSuggestionIdEl = document.getElementById('creative-suggestion-id');
+        const copyCreativeSuggestionIdBtn = document.getElementById('copy-creative-suggestion-id');
+        const creativeSuggestionEnEl = document.getElementById('creative-suggestion-en');
+        const copyCreativeSuggestionEnBtn = document.getElementById('copy-creative-suggestion-en');
+        
+        const finalPromptIdEl = document.getElementById('final-prompt-id');
+        const copyFinalPromptIdBtn = document.getElementById('copy-final-prompt-id');
+        const finalPromptEnEl = document.getElementById('final-prompt-en');
+        const copyFinalPromptEnBtn = document.getElementById('copy-final-prompt-en');
+
 
         function toggleActionButtonsVisibility() {
             const isAnyFieldFilled = formFields.some(field => field.value.trim() !== '');
@@ -459,6 +531,7 @@
             if (!originalPromptEn.trim()) return;
 
             const promptToOptimize = `Optimalkan prompt berikut untuk model AI teks-ke-gambar seperti Midjourney. Buat lebih deskriptif, detail, dan puitis. Hanya kembalikan prompt yang sudah dioptimalkan, tanpa tambahan teks atau penjelasan apa pun. Prompt asli: "${originalPromptEn}"`;
+            const promptForSuggestion = `Berdasarkan prompt ini: "${originalPromptEn}", berikan satu saran kreatif singkat (seperti elemen tak terduga, mood, atau detail artistik) untuk membuatnya lebih menarik. Berikan hanya sarannya saja dalam satu kalimat.`;
 
             optimizeBtn.disabled = true;
             optimizeBtnText.style.display = 'none';
@@ -466,12 +539,30 @@
             optimizeLoader.classList.remove('hidden');
             
             try {
-                 const optimizedPromptEn = await callGeminiAPI(promptToOptimize, userApiKey);
+                 const [optimizedPromptEn, creativeSuggestionEn] = await Promise.all([
+                     callGeminiAPI(promptToOptimize, userApiKey),
+                     callGeminiAPI(promptForSuggestion, userApiKey)
+                 ]);
+                 
                  optimizedOutputEnEl.value = optimizedPromptEn;
+                 creativeSuggestionEnEl.value = creativeSuggestionEn;
+                 
+                 const finalPromptEn = `${optimizedPromptEn}, ${creativeSuggestionEn}`;
+                 finalPromptEnEl.value = finalPromptEn;
 
-                 const promptToTranslate = `Terjemahkan prompt gambar yang artistik ini ke dalam Bahasa Indonesia yang natural dan deskriptif: "${optimizedPromptEn}"`;
-                 const translatedPromptId = await callGeminiAPI(promptToTranslate, userApiKey);
-                 optimizedOutputIdEl.value = translatedPromptId;
+                 const promptToTranslateOptimized = `Terjemahkan prompt gambar yang artistik ini ke dalam Bahasa Indonesia yang natural dan deskriptif: "${optimizedPromptEn}"`;
+                 const promptToTranslateCreative = `Terjemahkan saran kreatif ini ke dalam Bahasa Indonesia: "${creativeSuggestionEn}"`;
+                 const promptToTranslateFinal = `Terjemahkan prompt fotografi final ini ke dalam Bahasa Indonesia yang natural dan deskriptif: "${finalPromptEn}"`;
+                 
+                 const [translatedOptimizedId, translatedCreativeId, translatedFinalId] = await Promise.all([
+                     callGeminiAPI(promptToTranslateOptimized, userApiKey),
+                     callGeminiAPI(promptToTranslateCreative, userApiKey),
+                     callGeminiAPI(promptToTranslateFinal, userApiKey)
+                 ]);
+                 
+                 optimizedOutputIdEl.value = translatedOptimizedId;
+                 creativeSuggestionIdEl.value = translatedCreativeId;
+                 finalPromptIdEl.value = translatedFinalId;
 
                  optimizationResultsContainer.classList.add('visible');
 
@@ -588,6 +679,10 @@
         copyEnBtn.addEventListener('click', () => copyToClipboard(outputEnEl, copyEnBtn));
         copyOptimizedIdBtn.addEventListener('click', () => copyToClipboard(optimizedOutputIdEl, copyOptimizedIdBtn));
         copyOptimizedEnBtn.addEventListener('click', () => copyToClipboard(optimizedOutputEnEl, copyOptimizedEnBtn));
+        copyCreativeSuggestionIdBtn.addEventListener('click', () => copyToClipboard(creativeSuggestionIdEl, copyCreativeSuggestionIdBtn));
+        copyCreativeSuggestionEnBtn.addEventListener('click', () => copyToClipboard(creativeSuggestionEnEl, copyCreativeSuggestionEnBtn));
+        copyFinalPromptIdBtn.addEventListener('click', () => copyToClipboard(finalPromptIdEl, copyFinalPromptIdBtn));
+        copyFinalPromptEnBtn.addEventListener('click', () => copyToClipboard(finalPromptEnEl, copyFinalPromptEnBtn));
         optimizeBtn.addEventListener('click', handleOptimization);
         formFields.forEach(field => field.addEventListener('input', toggleActionButtonsVisibility));
         
