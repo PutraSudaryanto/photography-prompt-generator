@@ -53,7 +53,7 @@
             overflow: hidden;
         }
         #results-container.visible, #optimization-results-container.visible {
-            max-height: 1000px; /* Adjust as needed */
+            max-height: 1200px; /* Adjust as needed */
             opacity: 1;
         }
     </style>
@@ -177,27 +177,27 @@
                         <label for="shot-style" class="block text-sm font-medium mb-2 text-purple-600">Gaya Bidikan</label>
                         <select id="shot-style" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
                             <option value="">-- Pilih Gaya Bidikan --</option>
-                            <option value="Extreme Long Shot">Extreme Long Shot (Bidikan Sangat Jauh)</option>
-                            <option value="Long Shot">Long Shot (Bidikan Jauh)</option>
-                            <option value="Full Shot">Full Shot (Bidikan Penuh)</option>
-                            <option value="Medium Long Shot">Medium Long Shot (Bidikan Menengah Jauh)</option>
-                            <option value="Medium Shot">Medium Shot (Bidikan Menengah)</option>
-                            <option value="Medium Close-Up">Medium Close-Up (Bidikan Dekat Menengah)</option>
-                            <option value="Close-Up">Close-Up (Bidikan Dekat)</option>
-                            <option value="Extreme Close-Up">Extreme Close-Up (Bidikan Sangat Dekat)</option>
+                            <option value="Extreme Long Shot">Extreme Long Shot</option>
+                            <option value="Long Shot">Long Shot</option>
+                            <option value="Full Shot">Full Shot</option>
+                            <option value="Medium Long Shot">Medium Long Shot</option>
+                            <option value="Medium Shot">Medium Shot</option>
+                            <option value="Medium Close-Up">Medium Close-Up</option>
+                            <option value="Close-Up">Close-Up</option>
+                            <option value="Extreme Close-Up">Extreme Close-Up</option>
                         </select>
                     </div>
                     <div>
                         <label for="camera-angle" class="block text-sm font-medium mb-2 text-purple-600">Sudut Kamera</label>
                         <select id="camera-angle" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
                             <option value="">-- Pilih Sudut Kamera --</option>
-                            <option value="Low Angle">Low Angle (Sudut Rendah)</option>
-                            <option value="High Angle">High Angle (Sudut Tinggi)</option>
-                            <option value="Eye Level">Eye Level (Setinggi Mata)</option>
-                            <option value="Dutch Angle">Dutch Angle (Sudut Belanda)</option>
-                            <option value="Bird's Eye View">Bird's Eye View (Pandangan Mata Burung)</option>
-                            <option value="Worm's Eye View">Worm's Eye View (Pandangan Mata Cacing)</option>
-                            <option value="Point of View">Point of View (Sudut Pandang)</option>
+                            <option value="Low Angle">Low Angle</option>
+                            <option value="High Angle">High Angle</option>
+                            <option value="Eye Level">Eye Level</option>
+                            <option value="Dutch Angle">Dutch Angle</option>
+                            <option value="Bird's Eye View">Bird's Eye View</option>
+                            <option value="Worm's Eye View">Worm's Eye View</option>
+                            <option value="Point of View">Point of View</option>
                         </select>
                     </div>
                     <div>
@@ -277,18 +277,18 @@
                      <h4 class="text-base font-semibold text-slate-700 mb-2">Prompt Asli</h4>
                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="prompt-output-id" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Indonesia</label>
-                            <div class="relative">
-                                <textarea id="prompt-output-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
-                                <button id="copy-btn-id" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="prompt-output-id" class="block text-sm font-medium text-slate-600">Bahasa Indonesia</label>
+                                <button id="copy-btn-id" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
+                            <textarea id="prompt-output-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
                         </div>
                         <div>
-                            <label for="prompt-output-en" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Inggris (untuk AI)</label>
-                            <div class="relative">
-                                <textarea id="prompt-output-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
-                                <button id="copy-btn-en" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                            <div class="flex justify-between items-center mb-2">
+                                <label for="prompt-output-en" class="block text-sm font-medium text-slate-600">Bahasa Inggris (untuk AI)</label>
+                                <button id="copy-btn-en" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
+                            <textarea id="prompt-output-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
                     </div>
                 </div>
@@ -300,18 +300,18 @@
                             <h4 class="text-base font-semibold text-slate-700 mb-2">Versi Optimasi</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="optimized-output-id" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Indonesia</label>
-                                    <div class="relative">
-                                        <textarea id="optimized-output-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
-                                        <button id="copy-optimized-btn-id" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label for="optimized-output-id" class="block text-sm font-medium text-slate-600">Bahasa Indonesia</label>
+                                        <button id="copy-optimized-btn-id" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                                     </div>
+                                    <textarea id="optimized-output-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
                                 </div>
                                 <div>
-                                    <label for="optimized-output-en" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Inggris (untuk AI)</label>
-                                    <div class="relative">
-                                        <textarea id="optimized-output-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
-                                        <button id="copy-optimized-btn-en" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label for="optimized-output-en" class="block text-sm font-medium text-slate-600">Bahasa Inggris (untuk AI)</label>
+                                        <button id="copy-optimized-btn-en" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                                     </div>
+                                    <textarea id="optimized-output-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -319,18 +319,18 @@
                             <h4 class="text-base font-semibold text-slate-700 mb-2">Saran Kreatif dari Gemini</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="creative-suggestion-id" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Indonesia</label>
-                                    <div class="relative">
-                                        <textarea id="creative-suggestion-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
-                                        <button id="copy-creative-suggestion-id" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label for="creative-suggestion-id" class="block text-sm font-medium text-slate-600">Bahasa Indonesia</label>
+                                        <button id="copy-creative-suggestion-id" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                                     </div>
+                                    <textarea id="creative-suggestion-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
                                 </div>
                                 <div>
-                                    <label for="creative-suggestion-en" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Inggris (untuk AI)</label>
-                                    <div class="relative">
-                                        <textarea id="creative-suggestion-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
-                                        <button id="copy-creative-suggestion-en" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label for="creative-suggestion-en" class="block text-sm font-medium text-slate-600">Bahasa Inggris (untuk AI)</label>
+                                        <button id="copy-creative-suggestion-en" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                                     </div>
+                                    <textarea id="creative-suggestion-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -338,18 +338,18 @@
                             <h4 class="text-base font-semibold text-slate-700 mb-2">Prompt Fotografi Final</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="final-prompt-id" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Indonesia</label>
-                                    <div class="relative">
-                                        <textarea id="final-prompt-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
-                                        <button id="copy-final-prompt-id" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label for="final-prompt-id" class="block text-sm font-medium text-slate-600">Bahasa Indonesia</label>
+                                        <button id="copy-final-prompt-id" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                                     </div>
+                                    <textarea id="final-prompt-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 text-sm resize-none focus:outline-none"></textarea>
                                 </div>
                                 <div>
-                                    <label for="final-prompt-en" class="block text-sm font-medium text-slate-600 mb-2">Bahasa Inggris (untuk AI)</label>
-                                    <div class="relative">
-                                        <textarea id="final-prompt-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
-                                        <button id="copy-final-prompt-en" class="absolute top-3 right-3 bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label for="final-prompt-en" class="block text-sm font-medium text-slate-600">Bahasa Inggris (untuk AI)</label>
+                                        <button id="copy-final-prompt-en" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                                     </div>
+                                    <textarea id="final-prompt-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                                 </div>
                             </div>
                         </div>
