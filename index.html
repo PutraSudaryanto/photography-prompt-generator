@@ -61,15 +61,15 @@
                 <p class="text-xs text-slate-500 mt-2">Diperlukan untuk fitur "Ideasi Cepat" & "Optimalkan". Kunci API Anda tidak disimpan. Dapatkan dari <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Google AI Studio</a>.</p>
             </div>
             
-            <div class="p-6 rounded-lg border transition-all duration-300 bg-blue-50 border-blue-200">
-                <div class="flex justify-between items-center mb-4 border-b pb-3 border-blue-200">
-                    <div class="flex items-center text-lg font-semibold text-blue-700">
+            <div class="p-6 rounded-lg border transition-all duration-300 bg-sky-50 border-sky-200">
+                <div class="flex justify-between items-center mb-4 border-b pb-3 border-sky-200">
+                    <div class="flex items-center text-lg font-semibold text-sky-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg>
                         Deskripsi Foto Keseluruhan
                     </div>
                 </div>
                 <div class="relative">
-                     <textarea id="overall-desc" rows="3" class="form-field w-full border-2 rounded-lg py-2 px-4 pr-32 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-blue-300 text-blue-900 focus:ring-blue-500/50 focus:border-blue-500" placeholder="Tulis ide awal Anda di sini, lalu klik 'Ideasi Cepat' untuk mengembangkannya..."></textarea>
+                     <textarea id="overall-desc" rows="3" class="form-field w-full border-2 rounded-lg py-2 px-4 pr-32 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-sky-300 text-sky-900 focus:ring-sky-500/50 focus:border-sky-500" placeholder="Tulis ide awal Anda di sini, lalu klik 'Ideasi Cepat' untuk mengembangkannya..."></textarea>
                      <button id="ideate-btn" title="Ideasi Cepat" class="absolute top-2.5 right-2.5 flex items-center bg-blue-600 text-white hover:bg-blue-700 rounded-lg transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed px-3 py-1.5 text-sm font-semibold">
                         <span id="ideate-icon" class="mr-1.5">✨</span>
                         <span id="ideate-btn-text">Ideasi Cepat</span>
@@ -78,43 +78,43 @@
                 </div>
             </div>
 
-            <div class="p-6 rounded-lg border transition-all duration-300 bg-green-50 border-green-200">
-                <h3 class="flex items-center text-lg font-semibold mb-4 border-b pb-3 text-green-700 border-green-200 mb-5">
+            <div class="p-6 rounded-lg border transition-all duration-300 bg-emerald-50 border-emerald-200">
+                <h3 class="flex items-center text-lg font-semibold mb-4 border-b pb-3 text-emerald-700 border-emerald-200 mb-5">
                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                     Detail Subjek & Aksi (Karakter)
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                     <div>
-                        <label for="char-name" class="block text-sm font-medium mb-2 text-green-600">Nama Karakter</label>
-                        <input id="char-name" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500" placeholder="Contoh: Alex">
+                        <label for="char-name" class="block text-sm font-medium mb-2 text-emerald-600">Nama Karakter</label>
+                        <input id="char-name" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: Alex">
                     </div>
                     <div>
-                        <label for="char-nationality" class="block text-sm font-medium mb-2 text-green-600">Kewarganegaraan</label>
-                        <input id="char-nationality" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500" placeholder="Contoh: Indonesia">
+                        <label for="char-nationality" class="block text-sm font-medium mb-2 text-emerald-600">Kewarganegaraan</label>
+                        <input id="char-nationality" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: Indonesia">
                     </div>
                     <div>
-                        <label for="char-age" class="block text-sm font-medium mb-2 text-green-600">Usia</label>
-                        <input id="char-age" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500" placeholder="Contoh: 25 tahun">
+                        <label for="char-age" class="block text-sm font-medium mb-2 text-emerald-600">Usia</label>
+                        <input id="char-age" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: 25 tahun">
                     </div>
                     <div>
-                        <label for="char-gender" class="block text-sm font-medium mb-2 text-green-600">Jenis Kelamin</label>
-                        <select id="char-gender" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500 custom-select">
+                        <label for="char-gender" class="block text-sm font-medium mb-2 text-emerald-600">Jenis Kelamin</label>
+                        <select id="char-gender" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 custom-select">
                             <option value="">-- Pilih Jenis Kelamin --</option>
                             <option value="man">Pria</option>
                             <option value="woman">Wanita</option>
                         </select>
                     </div>
                     <div class="md:col-span-2">
-                        <label for="char-features" class="block text-sm font-medium mb-2 text-green-600">Ciri Fisik Utama</label>
-                        <input id="char-features" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500" placeholder="Contoh: rambut biru, mata bersinar">
+                        <label for="char-features" class="block text-sm font-medium mb-2 text-emerald-600">Ciri Fisik Utama</label>
+                        <input id="char-features" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: rambut biru, mata bersinar">
                     </div>
                     <div class="md:col-span-2">
-                        <label for="char-clothing" class="block text-sm font-medium mb-2 text-green-600">Pakaian & Aksesori</label>
-                        <input id="char-clothing" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500" placeholder="Contoh: jaket kulit hitam, kacamata cyberpunk">
+                        <label for="char-clothing" class="block text-sm font-medium mb-2 text-emerald-600">Pakaian & Aksesori</label>
+                        <input id="char-clothing" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: jaket kulit hitam, kacamata cyberpunk">
                     </div>
                     <div class="md:col-span-2">
-                        <label for="char-action" class="block text-sm font-medium mb-2 text-green-600">Aksi Utama</label>
-                        <input id="char-action" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500" placeholder="Contoh: membaca buku kuno, melihat ke kejauhan">
+                        <label for="char-action" class="block text-sm font-medium mb-2 text-emerald-600">Aksi Utama</label>
+                        <input id="char-action" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: membaca buku kuno, melihat ke kejauhan">
                     </div>
                 </div>
             </div>
@@ -179,9 +179,18 @@
                             <option value="rule of thirds">Aturan Sepertiga (Rule of Thirds)</option>
                         </select>
                     </div>
+                 </div>
+            </div>
+            
+            <div class="p-6 rounded-lg border transition-all duration-300 bg-pink-50 border-pink-200">
+                 <h3 class="flex items-center text-lg font-semibold mb-4 border-b pb-3 text-pink-700 border-pink-200 mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.5a6.5 6.5 0 100-13 6.5 6.5 0 000 13z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" /></svg>
+                    Pengaturan Teknis
+                 </h3>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 pt-2">
                     <div>
-                        <label for="camera" class="block text-sm font-medium mb-2 text-purple-600">Kamera & Lensa</label>
-                        <select id="camera" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
+                        <label for="camera" class="block text-sm font-medium mb-2 text-pink-600">Kamera & Lensa</label>
+                        <select id="camera" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-pink-300 text-pink-900 focus:ring-pink-500/50 focus:border-pink-500">
                             <option value="">-- Pilih Kamera/Lensa --</option>
                             <option value="shot on DSLR, 50mm f/1.8 lens, shallow depth of field">DSLR, Lensa 50mm f/1.8 (Bokeh)</option>
                             <option value="shot on analog film, Kodak Portra 400, film grain">Film Analog (Kodak Portra 400)</option>
@@ -191,8 +200,8 @@
                         </select>
                     </div>
                     <div>
-                        <label for="resolution" class="block text-sm font-medium mb-2 text-purple-600">Resolusi & Format</label>
-                        <select id="resolution" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
+                        <label for="resolution" class="block text-sm font-medium mb-2 text-pink-600">Resolusi & Format</label>
+                        <select id="resolution" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-pink-300 text-pink-900 focus:ring-pink-500/50 focus:border-pink-500">
                             <option value="">-- Pilih Resolusi --</option>
                             <option value="--ar 16:9">Rasio Aspek 16:9</option>
                             <option value="--ar 9:16">Rasio Aspek 9:16</option>
@@ -200,7 +209,7 @@
                             <option value="--ar 4:3">Rasio Aspek 4:3 (Klasik)</option>
                         </select>
                     </div>
-                </div>
+                 </div>
             </div>
         </div>
 
