@@ -156,6 +156,42 @@
                         </select>
                     </div>
                     <div>
+                        <label for="shot-style" class="block text-sm font-medium mb-2 text-purple-600">Gaya Bidikan</label>
+                        <select id="shot-style" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
+                            <option value="">-- Pilih Gaya Bidikan --</option>
+                            <option value="Extreme Long Shot">Extreme Long Shot (Bidikan Sangat Jauh)</option>
+                            <option value="Long Shot">Long Shot (Bidikan Jauh)</option>
+                            <option value="Full Shot">Full Shot (Bidikan Penuh)</option>
+                            <option value="Medium Long Shot">Medium Long Shot (Bidikan Menengah Jauh)</option>
+                            <option value="Medium Shot">Medium Shot (Bidikan Menengah)</option>
+                            <option value="Medium Close-Up">Medium Close-Up (Bidikan Dekat Menengah)</option>
+                            <option value="Close-Up">Close-Up (Bidikan Dekat)</option>
+                            <option value="Extreme Close-Up">Extreme Close-Up (Bidikan Sangat Dekat)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="camera-angle" class="block text-sm font-medium mb-2 text-purple-600">Sudut Kamera</label>
+                        <select id="camera-angle" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
+                            <option value="">-- Pilih Sudut Kamera --</option>
+                            <option value="Low Angle">Low Angle (Sudut Rendah)</option>
+                            <option value="High Angle">High Angle (Sudut Tinggi)</option>
+                            <option value="Eye Level">Eye Level (Setinggi Mata)</option>
+                            <option value="Dutch Angle">Dutch Angle (Sudut Belanda)</option>
+                            <option value="Bird's Eye View">Bird's Eye View (Pandangan Mata Burung)</option>
+                            <option value="Worm's Eye View">Worm's Eye View (Pandangan Mata Cacing)</option>
+                            <option value="Point of View">Point of View (Sudut Pandang)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="focus" class="block text-sm font-medium mb-2 text-purple-600">Fokus</label>
+                        <select id="focus" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
+                            <option value="">-- Pilih Fokus --</option>
+                            <option value="sharp focus">Fokus Tajam</option>
+                            <option value="soft focus">Fokus Lembut</option>
+                            <option value="bokeh">Bokeh</option>
+                        </select>
+                    </div>
+                    <div>
                         <label for="lighting" class="block text-sm font-medium mb-2 text-purple-600">Pencahayaan</label>
                         <select id="lighting" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
                             <option value="">-- Pilih Pencahayaan --</option>
@@ -167,24 +203,12 @@
                             <option value="backlit silhouette">Siluet (Backlit)</option>
                         </select>
                     </div>
-                    <div>
-                        <label for="composition" class="block text-sm font-medium mb-2 text-purple-600">Komposisi & Sudut</label>
-                        <select id="composition" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
-                            <option value="">-- Pilih Komposisi --</option>
-                            <option value="extreme close-up shot">Extreme Close-up</option>
-                            <option value="medium shot">Medium Shot</option>
-                            <option value="full body shot, wide angle">Wide Shot (Full Body)</option>
-                            <option value="low angle shot">Sudut Rendah (Low Angle)</option>
-                            <option value="high angle shot">Sudut Tinggi (High Angle)</option>
-                            <option value="rule of thirds">Aturan Sepertiga (Rule of Thirds)</option>
-                        </select>
-                    </div>
-                 </div>
+                </div>
             </div>
-            
+
             <div class="p-6 rounded-lg border transition-all duration-300 bg-pink-50 border-pink-200">
                  <h3 class="flex items-center text-lg font-semibold mb-4 border-b pb-3 text-pink-700 border-pink-200 mb-5">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.5a6.5 6.5 0 100-13 6.5 6.5 0 000 13z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                     Pengaturan Teknis
                  </h3>
                  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 pt-2">
@@ -512,7 +536,7 @@
                 promptPartsID_desc.push(detailsText);
             }
 
-            document.querySelectorAll('#style, #lighting, #composition, #camera').forEach(el => {
+            document.querySelectorAll('#style, #lighting, #composition, #camera, #resolution, #shot-style, #camera-angle, #focus').forEach(el => {
                 if (el.value) {
                     promptPartsEN_desc.push(el.value);
                     promptPartsID_desc.push(el.options[el.selectedIndex].text);
@@ -524,12 +548,6 @@
 
             let finalIdPrompt = promptPartsID_desc.join(', ');
             let finalEnPrompt = promptPartsEN_desc.join(', ');
-
-            const resolutionEl = document.getElementById('resolution');
-            if (resolutionEl.value) {
-                finalEnPrompt += ` ${resolutionEl.value}`;
-                finalIdPrompt += `, ${resolutionEl.options[resolutionEl.selectedIndex].text}`;
-            }
 
             outputIdEl.value = finalIdPrompt;
             outputEnEl.value = finalEnPrompt;
