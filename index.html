@@ -439,9 +439,18 @@
             optimizeBtn.classList.toggle('hidden', !isResultVisible);
         }
         
-        async function callGeminiAPI(prompt, apiKey) {
-             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-             const payload = { contents: chatHistory };
+        async function callGeminiAPI(prompt, apiKey, jsonSchema = null) {
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { 
+                contents: chatHistory,
+                generationConfig: {}
+             };
+
+             if (jsonSchema) {
+                 payload.generationConfig.responseMimeType = "application/json";
+                 payload.generationConfig.responseSchema = jsonSchema;
+             }
+             
              const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
              
              const response = await fetch(apiUrl, {
@@ -459,7 +468,8 @@
              if (result.candidates && result.candidates.length > 0 &&
                  result.candidates[0].content && result.candidates[0].content.parts &&
                  result.candidates[0].content.parts.length > 0) {
-                 return result.candidates[0].content.parts[0].text.trim();
+                 const responseText = result.candidates[0].content.parts[0].text;
+                 return jsonSchema ? JSON.parse(responseText) : responseText.trim();
              } else {
                  console.error("Struktur respons tidak terduga:", result);
                  throw new Error("Gagal mendapatkan konten dari respons API.");
@@ -530,8 +540,27 @@
 
             if (!originalPromptEn.trim()) return;
 
-            const promptToOptimize = `Optimalkan prompt berikut untuk model AI teks-ke-gambar seperti Midjourney. Buat lebih deskriptif, detail, dan puitis. Hanya kembalikan prompt yang sudah dioptimalkan, tanpa tambahan teks atau penjelasan apa pun. Prompt asli: "${originalPromptEn}"`;
-            const promptForSuggestion = `Berdasarkan prompt ini: "${originalPromptEn}", berikan satu saran kreatif singkat (seperti elemen tak terduga, mood, atau detail artistik) untuk membuatnya lebih menarik. Berikan hanya sarannya saja dalam satu kalimat.`;
+            const structuredPrompt = `
+                Analyze the following image prompt and perform three tasks:
+                1. Optimize the prompt to be more descriptive, detailed, and poetic for a text-to-image AI like Midjourney.
+                2. Provide a single, short, creative suggestion to make the prompt even more unique (e.g., an unexpected element, a specific mood, an artistic detail).
+                3. Translate both the optimized prompt and the creative suggestion into natural, descriptive Indonesian.
+                
+                Original Prompt: "${originalPromptEn}"
+                
+                Return the result ONLY in the following JSON format. Do not add any other text or explanations.
+            `;
+            
+            const schema = {
+              "type": "OBJECT",
+              "properties": {
+                "optimized_en": { "type": "STRING" },
+                "optimized_id": { "type": "STRING" },
+                "suggestion_en": { "type": "STRING" },
+                "suggestion_id": { "type": "STRING" }
+              },
+               "required": ["optimized_en", "optimized_id", "suggestion_en", "suggestion_id"]
+            };
 
             optimizeBtn.disabled = true;
             optimizeBtnText.style.display = 'none';
@@ -539,30 +568,15 @@
             optimizeLoader.classList.remove('hidden');
             
             try {
-                 const [optimizedPromptEn, creativeSuggestionEn] = await Promise.all([
-                     callGeminiAPI(promptToOptimize, userApiKey),
-                     callGeminiAPI(promptForSuggestion, userApiKey)
-                 ]);
+                 const structuredResult = await callGeminiAPI(structuredPrompt, userApiKey, schema);
                  
-                 optimizedOutputEnEl.value = optimizedPromptEn;
-                 creativeSuggestionEnEl.value = creativeSuggestionEn;
-                 
-                 const finalPromptEn = `${originalPromptEn}, ${creativeSuggestionEn}`;
-                 finalPromptEnEl.value = finalPromptEn;
+                 optimizedOutputEnEl.value = structuredResult.optimized_en;
+                 optimizedOutputIdEl.value = structuredResult.optimized_id;
+                 creativeSuggestionEnEl.value = structuredResult.suggestion_en;
+                 creativeSuggestionIdEl.value = structuredResult.suggestion_id;
 
-                 const promptToTranslateOptimized = `Terjemahkan prompt gambar yang artistik ini ke dalam Bahasa Indonesia yang natural dan deskriptif: "${optimizedPromptEn}"`;
-                 const promptToTranslateCreative = `Terjemahkan saran kreatif ini ke dalam Bahasa Indonesia: "${creativeSuggestionEn}"`;
-                 const promptToTranslateFinal = `Terjemahkan prompt fotografi final ini ke dalam Bahasa Indonesia yang natural dan deskriptif: "${finalPromptEn}"`;
-                 
-                 const [translatedOptimizedId, translatedCreativeId, translatedFinalId] = await Promise.all([
-                     callGeminiAPI(promptToTranslateOptimized, userApiKey),
-                     callGeminiAPI(promptToTranslateCreative, userApiKey),
-                     callGeminiAPI(promptToTranslateFinal, userApiKey)
-                 ]);
-                 
-                 optimizedOutputIdEl.value = translatedOptimizedId;
-                 creativeSuggestionIdEl.value = translatedCreativeId;
-                 finalPromptIdEl.value = translatedFinalId;
+                 finalPromptEnEl.value = `${originalPromptEn}, ${structuredResult.suggestion_en}`;
+                 finalPromptIdEl.value = `${outputIdEl.value}, ${structuredResult.suggestion_id}`;
 
                  optimizationResultsContainer.classList.add('visible');
 
@@ -599,7 +613,7 @@
             if (charFields.action) details_en.push(charFields.action);
             if (details_en.length > 0) subjectEN += `, ${details_en.join(', ')}`;
             
-            let subjectID = `Seorang karakter ${charFields.gender || ''} ${charFields.nationality || ''} ${charFields.age ? `berusia ${charFields.age}` : ''} ${charFields.name ? `bernama ${charFields.name}`: ''}`.replace(/\s+/g, ' ').trim();
+            let subjectID = `Seorang karakter ${charFields.gender ? (charFields.gender === 'man' ? 'pria' : 'wanita') : ''} ${charFields.nationality || ''} ${charFields.age || ''} ${charFields.name ? `bernama ${charFields.name}`: ''}`.replace(/\s+/g, ' ').trim();
             let details_id = [];
             if(charFields.features) details_id.push(`dengan ${charFields.features}`);
             if(charFields.clothing) details_id.push(`mengenakan ${charFields.clothing}`);
@@ -630,7 +644,8 @@
             document.querySelectorAll('#style, #lighting, #composition, #camera, #resolution, #shot-style, #camera-angle, #focus').forEach(el => {
                 if (el.value) {
                     promptPartsEN_desc.push(el.value);
-                    promptPartsID_desc.push(el.options[el.selectedIndex].text);
+                    const selectedText = el.options[el.selectedIndex].text;
+                    promptPartsID_desc.push(selectedText);
                 }
             });
 
