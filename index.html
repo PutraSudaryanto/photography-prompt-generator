@@ -477,21 +477,27 @@
         }
         
         function flashError(element, message) {
-            const originalPlaceholder = element.placeholder;
-            element.placeholder = message;
-            element.classList.add('border-red-500', 'focus:border-red-500');
             element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => {
-                 element.placeholder = originalPlaceholder;
-                 element.classList.remove('border-red-500', 'focus:border-red-500');
-            }, 3000);
+            if (element.tagName === 'P') {
+                element.classList.remove('hidden');
+                setTimeout(() => {
+                    element.classList.add('hidden');
+                }, 3000);
+            } else {
+                const originalPlaceholder = element.placeholder;
+                element.placeholder = message;
+                element.classList.add('border-red-500', 'focus:border-red-500');
+                setTimeout(() => {
+                    element.placeholder = originalPlaceholder;
+                    element.classList.remove('border-red-500', 'focus:border-red-500');
+                }, 3000);
+            }
         }
 
         async function handleIdeation() {
             const userApiKey = geminiApiKeyEl.value.trim();
             if (!userApiKey) {
                 flashError(geminiApiKeyEl, "Kunci API wajib diisi!");
-                apiKeyError.classList.add('hidden'); // Ensure general error is hidden
                 return;
             }
 
@@ -596,7 +602,6 @@
             const userApiKey = geminiApiKeyEl.value.trim();
             if (!userApiKey) {
                 flashError(geminiApiKeyEl, "Kunci API wajib diisi untuk menerjemahkan!");
-                apiKeyError.classList.add('hidden');
                 return;
             }
             apiKeyError.classList.add('hidden');
