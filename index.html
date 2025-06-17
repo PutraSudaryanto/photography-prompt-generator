@@ -587,7 +587,7 @@
                 overallDescEl.value = optimizedText;
             } catch (error) {
                 console.error("Error during API call:", error);
-                overallDescEl.value = "Terjadi kesalahan. Periksa koneksi atau coba lagi nanti.";
+                flashError(overallDescEl, "Terjadi kesalahan. Periksa koneksi atau coba lagi nanti.");
             } finally {
                 ideateBtn.disabled = false;
                 ideateIcon.style.display = 'inline';
@@ -599,7 +599,7 @@
         async function handleOptimization() {
             const userApiKey = geminiApiKeyEl.value.trim();
             if (!userApiKey) {
-                flashError(apiKeyError);
+                flashError(apiKeyError, "Kunci API wajib diisi untuk optimasi!");
                 return;
             }
             apiKeyError.classList.add('hidden');
@@ -611,49 +611,67 @@
 
             if (!originalPromptEn.trim()) return;
 
-            const structuredPrompt = `
-                Analyze the following image prompt and perform three tasks:
-                1. Optimize the prompt to be more descriptive, detailed, and poetic for a text-to-image AI like Midjourney.
-                2. Provide a single, short, creative suggestion to make the prompt even more unique (e.g., an unexpected element, a specific mood, an artistic detail).
-                3. Translate both the optimized prompt and the creative suggestion into natural, descriptive Indonesian.
-                
-                Original Prompt: "${originalPromptEn}"
-                
-                Return the result ONLY in the following JSON format. Do not add any other text or explanations.
-            `;
-            
-            const schema = {
-              "type": "OBJECT",
-              "properties": {
-                "optimized_en": { "type": "STRING" },
-                "optimized_id": { "type": "STRING" },
-                "suggestion_en": { "type": "STRING" },
-                "suggestion_id": { "type": "STRING" }
-              },
-               "required": ["optimized_en", "optimized_id", "suggestion_en", "suggestion_id"]
-            };
-
             optimizeBtn.disabled = true;
             optimizeBtnText.style.display = 'none';
             optimizeIcon.style.display = 'none';
             optimizeLoader.classList.remove('hidden');
             
             try {
-                 const structuredResult = await callGeminiAPI(structuredPrompt, userApiKey, schema);
-                 
-                 tabs.optimized.outputEnEl.value = structuredResult.optimized_en;
-                 tabs.optimized.outputIdEl.value = structuredResult.optimized_id;
-                 tabs.suggestion.outputEnEl.value = structuredResult.suggestion_en;
-                 tabs.suggestion.outputIdEl.value = structuredResult.suggestion_id;
+                // First API Call: Get optimization and suggestion
+                const optimizationPrompt = `
+                    Analyze the following image prompt and perform three tasks:
+                    1. Optimize the prompt to be more descriptive, detailed, and poetic for a text-to-image AI like Midjourney.
+                    2. Provide a single, short, creative suggestion to make the prompt even more unique (e.g., an unexpected element, a specific mood, an artistic detail).
+                    3. Translate both the optimized prompt and the creative suggestion into natural, descriptive Indonesian.
+                    
+                    Original Prompt: "${originalPromptEn}"
+                    
+                    Return the result ONLY in the following JSON format. Do not add any other text or explanations.
+                `;
+                const optimizationSchema = {
+                  "type": "OBJECT",
+                  "properties": {
+                    "optimized_en": { "type": "STRING" },
+                    "optimized_id": { "type": "STRING" },
+                    "suggestion_en": { "type": "STRING" },
+                    "suggestion_id": { "type": "STRING" }
+                  },
+                   "required": ["optimized_en", "optimized_id", "suggestion_en", "suggestion_id"]
+                };
+                const optimizationResult = await callGeminiAPI(optimizationPrompt, userApiKey, optimizationSchema);
 
-                 tabs.final.outputEnEl.value = `${originalPromptEn}, ${structuredResult.suggestion_en}`;
-                 tabs.final.outputIdEl.value = `${outputIdEl.value}, ${structuredResult.suggestion_id}`;
+                tabs.optimized.outputEnEl.value = optimizationResult.optimized_en;
+                tabs.optimized.outputIdEl.value = optimizationResult.optimized_id;
+                tabs.suggestion.outputEnEl.value = optimizationResult.suggestion_en;
+                tabs.suggestion.outputIdEl.value = optimizationResult.suggestion_id;
 
-                 tabs.optimized.btn.classList.remove('hidden');
-                 tabs.suggestion.btn.classList.remove('hidden');
-                 tabs.final.btn.classList.remove('hidden');
-                 
-                 switchTab('optimized');
+                // Second API Call: Generate the final prompt by combining the two results
+                const finalPromptGenPrompt = `
+                    Based on the following optimized prompt and a creative suggestion, generate a final, unified, and cohesive prompt for an AI image generator. The final prompt should seamlessly integrate the suggestion into the main description. Then, translate this final combined prompt into natural, descriptive Indonesian.
+
+                    Optimized Prompt: "${optimizationResult.optimized_en}"
+                    Creative Suggestion: "${optimizationResult.suggestion_en}"
+
+                    Return the result ONLY in the following JSON format. Do not add any other text or explanations.
+                `;
+                const finalPromptSchema = {
+                  "type": "OBJECT",
+                  "properties": {
+                    "final_prompt_en": { "type": "STRING" },
+                    "final_prompt_id": { "type": "STRING" }
+                  },
+                   "required": ["final_prompt_en", "final_prompt_id"]
+                };
+                const finalPromptResult = await callGeminiAPI(finalPromptGenPrompt, userApiKey, finalPromptSchema);
+
+                tabs.final.outputEnEl.value = finalPromptResult.final_prompt_en;
+                tabs.final.outputIdEl.value = finalPromptResult.final_prompt_id;
+
+                // Update UI
+                tabs.optimized.btn.classList.remove('hidden');
+                tabs.suggestion.btn.classList.remove('hidden');
+                tabs.final.btn.classList.remove('hidden');
+                switchTab('final'); // Switch to final tab to show the result
 
             } catch (error) {
                  console.error("Error during optimization:", error);
@@ -720,15 +738,10 @@
                 promptPartsID_desc.push(detailsText);
             }
 
-            document.querySelectorAll('#style, #lighting, #shot-style, #camera-angle, #focus, #camera, #resolution').forEach(el => {
+            document.querySelectorAll('#style, #lighting, #shot-style, #camera-angle, #focus, #camera').forEach(el => {
                 if (el.options && el.selectedIndex > 0) {
-                    const value = el.value;
                     const selectedText = el.options[el.selectedIndex].text;
-                    if(value.startsWith('--ar')) { // handle aspect ratio separately in english prompt
-                        // it will be handled later
-                    } else {
-                        promptPartsID_desc.push(selectedText);
-                    }
+                    promptPartsID_desc.push(selectedText);
                 }
             });
 
