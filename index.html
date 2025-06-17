@@ -139,36 +139,37 @@
                         <label for="shot-style" class="block text-sm font-medium mb-2 text-purple-600">Gaya Bidikan</label>
                         <select id="shot-style" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
                             <option value="">-- Pilih Gaya Bidikan --</option>
-                            <option value="Extreme Long Shot">Extreme Long Shot</option>
-                            <option value="Long Shot">Long Shot</option>
-                            <option value="Full Shot">Full Shot</option>
-                            <option value="Medium Long Shot">Medium Long Shot</option>
-                            <option value="Medium Shot">Medium Shot</option>
-                            <option value="Medium Close-Up">Medium Close-Up</option>
-                            <option value="Close-Up">Close-Up</option>
-                            <option value="Extreme Close-Up">Extreme Close-Up</option>
+                            <option value="extreme long shot">Extreme Long Shot (Bidikan Sangat Jauh)</option>
+                            <option value="long shot">Long Shot (Bidikan Jauh)</option>
+                            <option value="full shot">Full Shot (Bidikan Penuh)</option>
+                            <option value="medium long shot">Medium Long Shot (Bidikan Menengah Jauh)</option>
+                            <option value="medium Shot">Medium Shot (Bidikan Menengah)</option>
+                            <option value="medium close-Up">Medium Close-Up (Bidikan Dekat Menengah)</option>
+                            <option value="close-up">Close-Up (Bidikan Dekat)</option>
+                            <option value="extreme close-Up">Extreme Close-Up (Bidikan Sangat Dekat)</option>
                         </select>
                     </div>
                     <div>
                         <label for="camera-angle" class="block text-sm font-medium mb-2 text-purple-600">Sudut Kamera</label>
                         <select id="camera-angle" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
                             <option value="">-- Pilih Sudut Kamera --</option>
-                            <option value="Low Angle">Low Angle</option>
-                            <option value="High Angle">High Angle</option>
-                            <option value="Eye Level">Eye Level</option>
-                            <option value="Dutch Angle">Dutch Angle</option>
-                            <option value="Bird's Eye View">Bird's Eye View</option>
-                            <option value="Worm's Eye View">Worm's Eye View</option>
-                            <option value="Point of View">Point of View</option>
+                            <option value="low angle">Low Angle (Sudut Rendah)</option>
+                            <option value="high angle">High Angle (Sudut Tinggi)</option>
+                            <option value="eye Level">Eye Level (Setinggi Mata)</option>
+                            <option value="dutch angle">Dutch Angle (Sudut Belanda)</option>
+                            <option value="bird's eye view">Bird's Eye View (Pandangan Mata Burung)</option>
+                            <option value="worm's eye view">Worm's Eye View (Pandangan Mata Cacing)</option>
+                            <option value="point of view">Point of View (Sudut Pandang)</option>
                         </select>
                     </div>
                     <div>
                         <label for="focus" class="block text-sm font-medium mb-2 text-purple-600">Fokus</label>
                         <select id="focus" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 custom-select bg-white border-purple-300 text-purple-900 focus:ring-purple-500/50 focus:border-purple-500">
                             <option value="">-- Pilih Fokus --</option>
-                            <option value="sharp focus">Fokus Tajam</option>
-                            <option value="soft focus">Fokus Lembut</option>
-                            <option value="bokeh">Bokeh</option>
+                            <option value="shallow focus">Shallow Focus (Fokus Dangkal / Bokeh)</option>
+                            <option value="sharp focus">sharp focus (Fokus Tajam)</option>
+                            <option value="soft focus">Soft Focus (Fokus Lembut)</option>
+                            <option value="deep Focus">Deep Focus (Fokus Dalam)</option>
                         </select>
                     </div>
                     <div>
@@ -729,7 +730,7 @@
                 if (mainSubjectID) mainSubjectID = `${mainSubjectID} di ${sceneText}`; else mainSubjectID = sceneText;
             }
             
-            const finalSubjectID = overallDesc ? `${overallDesc} dari ${mainSubjectID}` : mainSubjectID;
+            const finalSubjectID = overallDesc ? `${overallDesc}. ${mainSubjectID}` : mainSubjectID;
 
             const promptPartsID_desc = [finalSubjectID].filter(Boolean);
 
@@ -740,7 +741,7 @@
 
             document.querySelectorAll('#style, #lighting, #shot-style, #camera-angle, #focus, #camera').forEach(el => {
                 if (el.options && el.selectedIndex > 0) {
-                    const selectedText = el.options[el.selectedIndex].text;
+                    const selectedText = el.options[el.selectedIndex].value;
                     promptPartsID_desc.push(selectedText);
                 }
             });
