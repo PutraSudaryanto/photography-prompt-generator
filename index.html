@@ -97,43 +97,15 @@
             </div>
 
             <div class="p-6 rounded-lg border transition-all duration-300 bg-emerald-50 border-emerald-200">
-                <h3 class="flex items-center text-lg font-semibold mb-4 border-b pb-3 text-emerald-700 border-emerald-200 mb-5">
-                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                    Detail Subjek & Aksi (Karakter)
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-                    <div>
-                        <label for="char-name" class="block text-sm font-medium mb-2 text-emerald-600">Nama Karakter</label>
-                        <input id="char-name" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: Alex">
-                    </div>
-                    <div>
-                        <label for="char-nationality" class="block text-sm font-medium mb-2 text-emerald-600">Kewarganegaraan</label>
-                        <input id="char-nationality" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: Indonesia">
-                    </div>
-                    <div>
-                        <label for="char-age" class="block text-sm font-medium mb-2 text-emerald-600">Usia</label>
-                        <input id="char-age" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: 25 tahun">
-                    </div>
-                    <div>
-                        <label for="char-gender" class="block text-sm font-medium mb-2 text-emerald-600">Jenis Kelamin</label>
-                        <select id="char-gender" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 custom-select">
-                            <option value="">-- Pilih Jenis Kelamin --</option>
-                            <option value="pria">Pria</option>
-                            <option value="wanita">Wanita</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label for="char-features" class="block text-sm font-medium mb-2 text-emerald-600">Ciri Fisik Utama</label>
-                        <input id="char-features" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: rambut biru, mata bersinar">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label for="char-clothing" class="block text-sm font-medium mb-2 text-emerald-600">Pakaian & Aksesori</label>
-                        <input id="char-clothing" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: jaket kulit hitam, kacamata cyberpunk">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label for="char-action" class="block text-sm font-medium mb-2 text-emerald-600">Aksi Utama</label>
-                        <input id="char-action" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500" placeholder="Contoh: membaca buku kuno, melihat ke kejauhan">
-                    </div>
+                <div class="flex justify-between items-center mb-4 border-b pb-3 text-emerald-700 border-emerald-200">
+                    <h3 class="flex items-center text-lg font-semibold">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                        Detail Subjek & Aksi (Karakter)
+                    </h3>
+                    <button id="add-character-btn" class="text-xs font-semibold bg-emerald-200 text-emerald-800 hover:bg-emerald-300 px-3 py-1 rounded-full transition-colors">+ Tambah Karakter</button>
+                </div>
+                <div id="character-container" class="space-y-6">
+                    <!-- Character Block will be inserted here -->
                 </div>
             </div>
 
@@ -408,6 +380,9 @@
         const optimizeBtn = document.getElementById('optimize-btn');
         const geminiApiKeyEl = document.getElementById('gemini-api-key');
         const apiKeyError = document.getElementById('api-key-error');
+        const addCharacterBtn = document.getElementById('add-character-btn');
+        const characterContainer = document.getElementById('character-container');
+        let characterCount = 0;
         
         const outputIdEl = document.getElementById('prompt-output-id');
         const copyIdBtn = document.getElementById('copy-btn-id');
@@ -429,10 +404,65 @@
         const copyFinalPromptIdBtn = document.getElementById('copy-final-prompt-id');
         const finalPromptEnEl = document.getElementById('final-prompt-en');
         const copyFinalPromptEnBtn = document.getElementById('copy-final-prompt-en');
+        
+        function createCharacterBlock() {
+            characterCount++;
+            const characterBlock = document.createElement('div');
+            characterBlock.className = 'character-block border-t border-emerald-300 pt-4 mt-4';
+            characterBlock.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="font-semibold text-emerald-700">Karakter ${characterCount}</h4>
+                    ${characterCount > 1 ? '<button class="remove-character-btn text-xs bg-red-100 text-red-600 hover:bg-red-200 px-2 py-1 rounded">Hapus</button>' : ''}
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                    <div>
+                        <label for="char-name-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Nama Karakter</label>
+                        <input id="char-name-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-name" placeholder="Contoh: Alex">
+                    </div>
+                    <div>
+                        <label for="char-nationality-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Kewarganegaraan</label>
+                        <input id="char-nationality-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-nationality" placeholder="Contoh: Indonesia">
+                    </div>
+                    <div>
+                        <label for="char-age-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Usia</label>
+                        <input id="char-age-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-age" placeholder="Contoh: 25 tahun">
+                    </div>
+                    <div>
+                        <label for="char-gender-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Jenis Kelamin</label>
+                        <select id="char-gender-${characterCount}" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 custom-select char-gender">
+                            <option value="">-- Pilih Jenis Kelamin --</option>
+                            <option value="pria">Pria</option>
+                            <option value="wanita">Wanita</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="char-features-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Ciri Fisik Utama</label>
+                        <input id="char-features-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-features" placeholder="Contoh: rambut biru, mata bersinar">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="char-clothing-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Pakaian & Aksesori</label>
+                        <input id="char-clothing-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-clothing" placeholder="Contoh: jaket kulit hitam, kacamata cyberpunk">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="char-action-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Aksi Utama</label>
+                        <input id="char-action-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-action" placeholder="Contoh: membaca buku kuno, melihat ke kejauhan">
+                    </div>
+                </div>
+            `;
+            characterContainer.appendChild(characterBlock);
+            if (characterCount > 1) {
+                characterBlock.querySelector('.remove-character-btn').addEventListener('click', () => {
+                    characterBlock.remove();
+                });
+            }
+        }
+        
+        addCharacterBtn.addEventListener('click', createCharacterBlock);
+        createCharacterBlock(); // Create the first character block on page load
 
 
         function toggleActionButtonsVisibility() {
-            const isAnyFieldFilled = formFields.some(field => field.value.trim() !== '');
+            const isAnyFieldFilled = Array.from(document.querySelectorAll('.form-field')).some(field => field.value.trim() !== '');
             clearBtn.classList.toggle('hidden', !isAnyFieldFilled);
             
             const isResultVisible = resultsContainer.classList.contains('visible');
@@ -611,26 +641,32 @@
                 flashError(overallDescEl, "Deskripsi foto wajib diisi!");
                 return;
             }
-            
-            const charFields = {
-                name: document.getElementById('char-name').value.trim(),
-                nationality: document.getElementById('char-nationality').value.trim(),
-                age: document.getElementById('char-age').value.trim(),
-                gender: document.getElementById('char-gender').value.trim(),
-                features: document.getElementById('char-features').value.trim(),
-                clothing: document.getElementById('char-clothing').value.trim(),
-                action: document.getElementById('char-action').value.trim(),
-            };
-            
-            let subjectID = `Seorang karakter ${charFields.gender || ''} ${charFields.nationality || ''} ${charFields.age || ''} ${charFields.name ? `bernama ${charFields.name}`: ''}`.replace(/\s+/g, ' ').trim();
-            let details_id = [];
-            if(charFields.features) details_id.push(`dengan ${charFields.features}`);
-            if(charFields.clothing) details_id.push(`mengenakan ${charFields.clothing}`);
-            if(charFields.action) details_id.push(`sedang ${charFields.action}`);
-            if(details_id.length > 0) subjectID += `, ${details_id.join(', ')}`;
 
+            const characterBlocks = document.querySelectorAll('.character-block');
+            let charactersID = [];
+            
+            characterBlocks.forEach(block => {
+                const charFields = {
+                    name: block.querySelector('.char-name').value.trim(),
+                    nationality: block.querySelector('.char-nationality').value.trim(),
+                    age: block.querySelector('.char-age').value.trim(),
+                    gender: block.querySelector('.char-gender').value.trim(),
+                    features: block.querySelector('.char-features').value.trim(),
+                    clothing: block.querySelector('.char-clothing').value.trim(),
+                    action: block.querySelector('.char-action').value.trim(),
+                };
+                
+                let subjectID = `seorang karakter ${charFields.gender || ''} ${charFields.nationality || ''} ${charFields.age || ''} ${charFields.name ? `bernama ${charFields.name}`: ''}`.replace(/\s+/g, ' ').trim();
+                let details_id = [];
+                if(charFields.features) details_id.push(`dengan ${charFields.features}`);
+                if(charFields.clothing) details_id.push(`mengenakan ${charFields.clothing}`);
+                if(charFields.action) details_id.push(`sedang ${charFields.action}`);
+                if(details_id.length > 0) subjectID += `, ${details_id.join(', ')}`;
+                charactersID.push(subjectID);
+            });
+            
             const sceneText = document.getElementById('scene').value.trim();
-            let mainSubjectID = charFields.name || charFields.gender ? subjectID : '';
+            let mainSubjectID = charactersID.join(' dan ');
 
             if (sceneText) {
                 if (mainSubjectID) mainSubjectID = `${mainSubjectID} di ${sceneText}`; else mainSubjectID = sceneText;
@@ -677,7 +713,11 @@
         }
         
         function clearFields() {
-            formFields.forEach(field => { field.value = ''; });
+            characterContainer.innerHTML = '';
+            createCharacterBlock();
+            formFields.forEach(field => { 
+                if(!field.closest('.character-block')) field.value = ''; 
+            });
             outputIdEl.value = '';
             outputEnEl.value = '';
             optimizedOutputIdEl.value = '';
@@ -713,7 +753,12 @@
         copyFinalPromptIdBtn.addEventListener('click', () => copyToClipboard(finalPromptIdEl, copyFinalPromptIdBtn));
         copyFinalPromptEnBtn.addEventListener('click', () => copyToClipboard(finalPromptEnEl, copyFinalPromptEnBtn));
         optimizeBtn.addEventListener('click', handleOptimization);
-        formFields.forEach(field => field.addEventListener('input', toggleActionButtonsVisibility));
+        
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('form-field')) {
+                toggleActionButtonsVisibility();
+            }
+        });
         
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
         toggleActionButtonsVisibility();
