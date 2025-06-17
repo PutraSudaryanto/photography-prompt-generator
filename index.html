@@ -218,14 +218,14 @@
             </div>
         </div>
 
-        <div class="flex justify-center items-center space-x-4 mt-10 mb-6">
-            <button id="clear-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-8 rounded-full text-base transform hover:scale-105 transition-all duration-300 hidden">
+        <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-4 md:space-y-0 mt-10 mb-6">
+            <button id="clear-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-8 rounded-full text-base transform hover:scale-105 transition-all duration-300 hidden w-full md:w-auto">
                 Hapus Isian
             </button>
-            <button id="generate-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-base shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+            <button id="generate-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-base shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 w-full md:w-auto">
                 Buat Prompt!
             </button>
-            <button id="optimize-btn" title="Optimalkan Prompt" class="flex items-center bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full text-base shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 hidden">
+            <button id="optimize-btn" title="Optimalkan Prompt" class="flex items-center justify-center bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-8 rounded-full text-base shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300 hidden w-full md:w-auto">
                 <svg id="optimize-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
                 <span id="optimize-btn-text">Optimalkan</span>
                 <svg id="optimize-loader" class="animate-spin h-5 w-5 mr-2 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
@@ -263,14 +263,14 @@
                                 <label for="prompt-output-id" class="block text-sm font-medium text-slate-600">Bahasa Indonesia</label>
                                 <button id="copy-btn-id" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
-                            <textarea id="prompt-output-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                            <textarea id="prompt-output-id" readonly class="w-full h-60 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label for="prompt-output-en" class="block text-sm font-medium text-slate-600">Bahasa Inggris (untuk AI)</label>
                                 <button id="copy-btn-en" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
-                            <textarea id="prompt-output-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                            <textarea id="prompt-output-en" readonly class="w-full h-60 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
                     </div>
                 </div>
@@ -283,15 +283,22 @@
                                 <label for="optimized-output-id" class="block text-sm font-medium text-slate-600">Bahasa Indonesia</label>
                                 <button id="copy-optimized-btn-id" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
-                            <textarea id="optimized-output-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                            <textarea id="optimized-output-id" readonly class="w-full h-60 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label for="optimized-output-en" class="block text-sm font-medium text-slate-600">Bahasa Inggris (untuk AI)</label>
                                 <button id="copy-optimized-btn-en" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
-                            <textarea id="optimized-output-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                            <textarea id="optimized-output-en" readonly class="w-full h-60 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
+                    </div>
+                    <div class="mt-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="optimized-content-hashtag" class="block text-sm font-medium text-slate-600">Konten & Hashtag</label>
+                            <button id="copy-optimized-content-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                        </div>
+                        <textarea id="optimized-content-hashtag" class="w-full h-60 bg-white border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500" placeholder="Konten dan hashtag yang di-generate akan muncul di sini..."></textarea>
                     </div>
                 </div>
                 
@@ -303,14 +310,14 @@
                                 <label for="creative-suggestion-id" class="block text-sm font-medium text-slate-600">Bahasa Indonesia</label>
                                 <button id="copy-creative-suggestion-id" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
-                            <textarea id="creative-suggestion-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                            <textarea id="creative-suggestion-id" readonly class="w-full h-60 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label for="creative-suggestion-en" class="block text-sm font-medium text-slate-600">Bahasa Inggris (untuk AI)</label>
                                 <button id="copy-creative-suggestion-en" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
-                            <textarea id="creative-suggestion-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                            <textarea id="creative-suggestion-en" readonly class="w-full h-60 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
                     </div>
                 </div>
@@ -323,15 +330,22 @@
                                 <label for="final-prompt-id" class="block text-sm font-medium text-slate-600">Bahasa Indonesia</label>
                                 <button id="copy-final-prompt-id" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
-                            <textarea id="final-prompt-id" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                            <textarea id="final-prompt-id" readonly class="w-full h-60 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label for="final-prompt-en" class="block text-sm font-medium text-slate-600">Bahasa Inggris (untuk AI)</label>
                                 <button id="copy-final-prompt-en" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
                             </div>
-                            <textarea id="final-prompt-en" readonly class="w-full h-40 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
+                            <textarea id="final-prompt-en" readonly class="w-full h-60 bg-slate-100 border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none"></textarea>
                         </div>
+                    </div>
+                    <div class="mt-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="final-content-hashtag" class="block text-sm font-medium text-slate-600">Konten & Hashtag</label>
+                            <button id="copy-final-content-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-600 font-semibold py-1 px-3 rounded-md text-xs transition-colors">Salin</button>
+                        </div>
+                        <textarea id="final-content-hashtag" class="w-full h-60 bg-white border border-slate-300 rounded-lg p-4 text-slate-700 font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500" placeholder="Konten dan hashtag yang di-generate akan muncul di sini..."></textarea>
                     </div>
                 </div>
             </div>
@@ -407,7 +421,9 @@
                 outputIdEl: document.getElementById('optimized-output-id'),
                 outputEnEl: document.getElementById('optimized-output-en'),
                 copyIdBtn: document.getElementById('copy-optimized-btn-id'),
-                copyEnBtn: document.getElementById('copy-optimized-btn-en')
+                copyEnBtn: document.getElementById('copy-optimized-btn-en'),
+                contentEl: document.getElementById('optimized-content-hashtag'),
+                copyContentBtn: document.getElementById('copy-optimized-content-btn')
             },
             suggestion: { 
                 btn: document.getElementById('tab-suggestion'), 
@@ -423,7 +439,9 @@
                 outputIdEl: document.getElementById('final-prompt-id'),
                 outputEnEl: document.getElementById('final-prompt-en'),
                 copyIdBtn: document.getElementById('copy-final-prompt-id'),
-                copyEnBtn: document.getElementById('copy-final-prompt-en')
+                copyEnBtn: document.getElementById('copy-final-prompt-en'),
+                contentEl: document.getElementById('final-content-hashtag'),
+                copyContentBtn: document.getElementById('copy-final-content-btn')
             }
         };
         
@@ -618,16 +636,18 @@
             optimizeLoader.classList.remove('hidden');
             
             try {
-                // First API Call: Get optimization and suggestion
+                // First API Call: Get optimization, suggestion, and content
                 const optimizationPrompt = `
-                    Analyze the following image prompt and perform three tasks:
-                    1. Optimize the prompt to be more descriptive, detailed, and poetic for a text-to-image AI like Midjourney.
-                    2. Provide a single, short, creative suggestion to make the prompt even more unique (e.g., an unexpected element, a specific mood, an artistic detail).
-                    3. Translate both the optimized prompt and the creative suggestion into natural, descriptive Indonesian.
+                    Analisis prompt gambar berikut dan lakukan tugas-tugas ini:
+                    1. Optimalkan prompt agar lebih deskriptif, detail, dan puitis untuk AI text-to-image seperti Midjourney (dalam Bahasa Inggris).
+                    2. Terjemahkan prompt yang telah dioptimalkan ke dalam Bahasa Indonesia yang alami dan deskriptif.
+                    3. Berikan satu saran kreatif yang singkat untuk membuat prompt lebih unik (dalam Bahasa Inggris).
+                    4. Terjemahkan saran kreatif tersebut ke dalam Bahasa Indonesia.
+                    5. Berdasarkan prompt yang telah dioptimalkan, buatlah caption media sosial yang menarik dan daftar hashtag yang relevan (dalam Bahasa Indonesia). Gabungkan caption dan hashtag ke dalam satu string teks.
                     
-                    Original Prompt: "${originalPromptEn}"
+                    Prompt Asli: "${originalPromptEn}"
                     
-                    Return the result ONLY in the following JSON format. Do not add any other text or explanations.
+                    Kembalikan hasilnya HANYA dalam format JSON berikut. Jangan tambahkan teks atau penjelasan lain.
                 `;
                 const optimizationSchema = {
                   "type": "OBJECT",
@@ -635,38 +655,45 @@
                     "optimized_en": { "type": "STRING" },
                     "optimized_id": { "type": "STRING" },
                     "suggestion_en": { "type": "STRING" },
-                    "suggestion_id": { "type": "STRING" }
+                    "suggestion_id": { "type": "STRING" },
+                    "content_and_hashtag_id": { "type": "STRING" }
                   },
-                   "required": ["optimized_en", "optimized_id", "suggestion_en", "suggestion_id"]
+                   "required": ["optimized_en", "optimized_id", "suggestion_en", "suggestion_id", "content_and_hashtag_id"]
                 };
                 const optimizationResult = await callGeminiAPI(optimizationPrompt, userApiKey, optimizationSchema);
 
                 tabs.optimized.outputEnEl.value = optimizationResult.optimized_en;
                 tabs.optimized.outputIdEl.value = optimizationResult.optimized_id;
+                tabs.optimized.contentEl.value = optimizationResult.content_and_hashtag_id;
                 tabs.suggestion.outputEnEl.value = optimizationResult.suggestion_en;
                 tabs.suggestion.outputIdEl.value = optimizationResult.suggestion_id;
 
-                // Second API Call: Generate the final prompt by combining the two results
+                // Second API Call: Generate the final prompt and its content
                 const finalPromptGenPrompt = `
-                    Based on the following optimized prompt and a creative suggestion, generate a final, unified, and cohesive prompt for an AI image generator. The final prompt should seamlessly integrate the suggestion into the main description. Then, translate this final combined prompt into natural, descriptive Indonesian.
+                    Berdasarkan prompt yang telah dioptimalkan dan saran kreatif berikut, lakukan tugas-tugas ini:
+                    1. Buat prompt final yang terpadu dan kohesif untuk generator gambar AI, dengan mengintegrasikan saran ke dalam deskripsi utama (dalam Bahasa Inggris).
+                    2. Terjemahkan prompt final gabungan ini ke dalam Bahasa Indonesia yang alami dan deskriptif.
+                    3. Berdasarkan prompt final tersebut, buatlah caption media sosial baru yang menarik dan daftar hashtag yang relevan (dalam Bahasa Indonesia). Gabungkan caption dan hashtag ke dalam satu string teks.
 
-                    Optimized Prompt: "${optimizationResult.optimized_en}"
-                    Creative Suggestion: "${optimizationResult.suggestion_en}"
+                    Prompt Optimal: "${optimizationResult.optimized_en}"
+                    Saran Kreatif: "${optimizationResult.suggestion_en}"
 
-                    Return the result ONLY in the following JSON format. Do not add any other text or explanations.
+                    Kembalikan hasilnya HANYA dalam format JSON berikut. Jangan tambahkan teks atau penjelasan lain.
                 `;
                 const finalPromptSchema = {
                   "type": "OBJECT",
                   "properties": {
                     "final_prompt_en": { "type": "STRING" },
-                    "final_prompt_id": { "type": "STRING" }
+                    "final_prompt_id": { "type": "STRING" },
+                    "content_and_hashtag_id": { "type": "STRING" }
                   },
-                   "required": ["final_prompt_en", "final_prompt_id"]
+                   "required": ["final_prompt_en", "final_prompt_id", "content_and_hashtag_id"]
                 };
                 const finalPromptResult = await callGeminiAPI(finalPromptGenPrompt, userApiKey, finalPromptSchema);
 
                 tabs.final.outputEnEl.value = finalPromptResult.final_prompt_en;
                 tabs.final.outputIdEl.value = finalPromptResult.final_prompt_id;
+                tabs.final.contentEl.value = finalPromptResult.content_and_hashtag_id;
 
                 // Update UI
                 tabs.optimized.btn.classList.remove('hidden');
@@ -790,6 +817,7 @@
             Object.values(tabs).forEach(tab => {
                 if(tab.outputIdEl) tab.outputIdEl.value = '';
                 if(tab.outputEnEl) tab.outputEnEl.value = '';
+                if(tab.contentEl) tab.contentEl.value = '';
             });
             resultsContainer.classList.add('hidden');
             toggleActionButtonsVisibility();
@@ -829,6 +857,9 @@
                 }
                 if (tab.copyEnBtn) {
                     tab.copyEnBtn.addEventListener('click', () => copyToClipboard(tab.outputEnEl, tab.copyEnBtn));
+                }
+                if (tab.copyContentBtn) {
+                    tab.copyContentBtn.addEventListener('click', () => copyToClipboard(tab.contentEl, tab.copyContentBtn));
                 }
             });
             
