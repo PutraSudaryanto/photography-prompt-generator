@@ -73,7 +73,7 @@
                 <div class="flex justify-between items-center mb-4 border-b pb-3 border-sky-200">
                     <div class="flex items-center text-lg font-semibold text-sky-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7" /></svg>
-                        Deskripsi Foto Keseluruhan
+                        Latar Belakang
                     </div>
                 </div>
                 <div class="relative">
@@ -84,6 +84,14 @@
                         <svg id="ideate-loader" class="animate-spin h-4 w-4 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     </button>
                 </div>
+            </div>
+
+            <div class="p-6 rounded-lg border transition-all duration-300 bg-orange-50 border-orange-200">
+                <div class="flex items-center text-lg font-semibold mb-4 border-b pb-3 text-orange-700 border-orange-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1-1m6-3l-2-2" /></svg>
+                    Suasana
+                </div>
+                <textarea id="scene" rows="3" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-orange-300 text-orange-900 focus:ring-orange-500/50 focus:border-orange-500" placeholder="Contoh: di kafe remang-remang dengan cahaya hangat, di hutan ajaib berkabut dengan sinar bulan menembus pepohonan"></textarea>
             </div>
 
             <div class="p-6 rounded-lg border transition-all duration-300 bg-emerald-50 border-emerald-200">
@@ -97,14 +105,6 @@
                 <div id="character-container" class="space-y-6">
                     <!-- Character Block will be inserted here -->
                 </div>
-            </div>
-
-            <div class="p-6 rounded-lg border transition-all duration-300 bg-orange-50 border-orange-200">
-                <div class="flex items-center text-lg font-semibold mb-4 border-b pb-3 text-orange-700 border-orange-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1-1m6-3l-2-2" /></svg>
-                    Latar Belakang & Suasana
-                </div>
-                <input type="text" id="scene" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-orange-300 text-orange-900 focus:ring-orange-500/50 focus:border-orange-500" placeholder="Contoh: di kafe remang-remang, di hutan ajaib">
             </div>
 
             <div class="p-6 rounded-lg border transition-all duration-300 bg-red-50 border-red-200">
@@ -454,36 +454,34 @@
                     <h4 class="font-semibold text-emerald-700">Karakter ${characterCount}</h4>
                     ${characterCount > 1 ? '<button class="remove-character-btn text-xs bg-red-100 text-red-600 hover:bg-red-200 px-2 py-1 rounded">Hapus</button>' : ''}
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-                    <div>
-                        <label for="char-name-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Nama Karakter</label>
-                        <input id="char-name-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-name" placeholder="Contoh: Alex">
+                <div class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
+                        <div>
+                            <label for="char-gender-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Jenis Kelamin</label>
+                            <select id="char-gender-${characterCount}" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 custom-select char-gender">
+                                <option value="">-- Pilih --</option>
+                                <option value="pria">Pria</option>
+                                <option value="wanita">Wanita</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="char-nationality-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Kewarganegaraan</label>
+                            <input id="char-nationality-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-nationality" placeholder="Contoh: Indonesia">
+                        </div>
+                        <div>
+                            <label for="char-age-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Usia</label>
+                            <input id="char-age-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-age" placeholder="Contoh: 25 tahun">
+                        </div>
                     </div>
                     <div>
-                        <label for="char-nationality-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Kewarganegaraan</label>
-                        <input id="char-nationality-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-nationality" placeholder="Contoh: Indonesia">
-                    </div>
-                    <div>
-                        <label for="char-age-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Usia</label>
-                        <input id="char-age-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-age" placeholder="Contoh: 25 tahun">
-                    </div>
-                    <div>
-                        <label for="char-gender-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Jenis Kelamin</label>
-                        <select id="char-gender-${characterCount}" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 custom-select char-gender">
-                            <option value="">-- Pilih Jenis Kelamin --</option>
-                            <option value="pria">Pria</option>
-                            <option value="wanita">Wanita</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-2">
                         <label for="char-features-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Ciri Fisik Utama</label>
                         <input id="char-features-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-features" placeholder="Contoh: rambut biru, mata bersinar">
                     </div>
-                    <div class="md:col-span-2">
+                    <div>
                         <label for="char-clothing-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Pakaian & Aksesori</label>
                         <input id="char-clothing-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-clothing" placeholder="Contoh: jaket kulit hitam, kacamata cyberpunk">
                     </div>
-                    <div class="md:col-span-2">
+                    <div>
                         <label for="char-action-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Aksi Utama</label>
                         <input id="char-action-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-action" placeholder="Contoh: membaca buku kuno, melihat ke kejauhan">
                     </div>
@@ -722,7 +720,7 @@
 
             const overallDesc = overallDescEl.value.trim();
             if (!overallDesc) {
-                flashError(overallDescEl, "Deskripsi foto wajib diisi!");
+                flashError(overallDescEl, "Latar belakang wajib diisi!");
                 return;
             }
 
@@ -731,7 +729,6 @@
             
             characterBlocks.forEach(block => {
                 const charFields = {
-                    name: block.querySelector('.char-name').value.trim(),
                     nationality: block.querySelector('.char-nationality').value.trim(),
                     age: block.querySelector('.char-age').value.trim(),
                     gender: block.querySelector('.char-gender').value.trim(),
@@ -740,7 +737,7 @@
                     action: block.querySelector('.char-action').value.trim(),
                 };
                 if (Object.values(charFields).some(field => field !== '')) {
-                    let subjectID = `seorang karakter ${charFields.gender || ''} ${charFields.nationality || ''} ${charFields.age || ''} ${charFields.name ? `bernama ${charFields.name}`: ''}`.replace(/\s+/g, ' ').trim();
+                    let subjectID = `seorang karakter ${charFields.gender || ''} ${charFields.nationality || ''} ${charFields.age || ''}`.replace(/\s+/g, ' ').trim();
                     let details_id = [];
                     if(charFields.features) details_id.push(`dengan ${charFields.features}`);
                     if(charFields.clothing) details_id.push(`mengenakan ${charFields.clothing}`);
@@ -754,7 +751,7 @@
             let mainSubjectID = charactersID.join(' dan ');
 
             if (sceneText) {
-                if (mainSubjectID) mainSubjectID = `${mainSubjectID} di ${sceneText}`; else mainSubjectID = sceneText;
+                if (mainSubjectID) mainSubjectID = `${sceneText} ${mainSubjectID}`; else mainSubjectID = sceneText;
             }
             
             const finalSubjectID = overallDesc ? `${overallDesc}. ${mainSubjectID}` : mainSubjectID;
