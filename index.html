@@ -47,6 +47,8 @@
             background-size: 0.7em;
         }
     </style>
+    <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 flex flex-col items-center justify-center min-h-screen p-4">
 
@@ -67,6 +69,31 @@
                 </div>
                 <input type="password" id="gemini-api-key" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-yellow-300 text-yellow-900 focus:ring-yellow-500/50 focus:border-yellow-500" placeholder="Masukkan Kunci API Gemini Anda di sini...">
                 <p class="text-xs text-slate-500 mt-2">Diperlukan untuk fitur "Ideasi Cepat" & "Optimalkan". Kunci API Anda tidak disimpan. Dapatkan dari <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline">Google AI Studio</a>.</p>
+            </div>
+             <div class="p-6 rounded-lg border transition-all duration-300 bg-green-50 border-green-200">
+                <div class="flex items-center text-lg font-semibold mb-4 border-b pb-3 text-green-700 border-green-200">
+                    <svg class="w-6 h-6 mr-3 text-green-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M9 2.221V7.779a1 1 0 0 1-1.36.93l-3.03-1.635a1 1 0 0 1 0-1.86l3.03-1.635A1 1 0 0 1 9 2.221Zm10.154 5.4a1 1 0 0 1-1.36.93l-3.03-1.635a1 1 0 0 1 0-1.86l3.03-1.635a1 1 0 0 1 1.36.93v3.87Zm-2.69 4.316a1 1 0 0 1-1.36.93l-3.03-1.635a1 1 0 0 1 0-1.86l3.03-1.635a1 1 0 0 1 1.36.93v3.87Zm-3.464 4.316a1 1 0 0 1-1.36.93l-3.03-1.635a1 1 0 0 1 0-1.86l3.03-1.635a1 1 0 0 1 1.36.93v3.87Zm-4.341-1.684a1 1 0 0 0-1-1H3a1 1 0 1 0 0 2h3.319a1 1 0 0 0 1-1Zm1-4.017a1 1 0 0 0-1-1H3a1 1 0 1 0 0 2h6.319a1 1 0 0 0 1-1Zm1-4.017a1 1 0 0 0-1-1H3a1 1 0 1 0 0 2h9.319a1 1 0 0 0 1-1Z" clip-rule="evenodd"/>
+                    </svg>
+                    Integrasi Google Sheets (Opsional)
+                </div>
+                <div class="space-y-4">
+                     <div>
+                        <label for="google-client-id" class="block text-sm font-medium mb-2 text-green-600">Client ID Google</label>
+                        <input type="password" id="google-client-id" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500" placeholder="Masukkan Client ID Anda dari Google Cloud Console">
+                     </div>
+                     <div>
+                        <label for="spreadsheet-url" class="block text-sm font-medium mb-2 text-green-600">URL Google Sheet</label>
+                        <input type="text" id="spreadsheet-url" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-green-300 text-green-900 focus:ring-green-500/50 focus:border-green-500" placeholder="Contoh: https://docs.google.com/spreadsheets/d/...">
+                     </div>
+                     <div class="flex items-center space-x-4">
+                         <button id="connect-g-sheets-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg text-sm transition-all duration-300 disabled:bg-green-400">
+                            Hubungkan ke Google
+                         </button>
+                         <div id="g-sheets-status" class="text-sm text-slate-500">Status: Belum terhubung</div>
+                     </div>
+                </div>
+                <p class="text-xs text-slate-500 mt-2">Data dari "Prompt Final" akan disimpan ke sheet Anda setiap kali optimasi berhasil.</p>
             </div>
             
             <div class="p-6 rounded-lg border transition-all duration-300 bg-sky-50 border-sky-200">
@@ -404,6 +431,134 @@
         const characterContainer = document.getElementById('character-container');
         let characterCount = 0;
         
+        // Google Sheets Integration
+        const connectGSheetsBtn = document.getElementById('connect-g-sheets-btn');
+        const gSheetsStatus = document.getElementById('g-sheets-status');
+        const googleClientIdEl = document.getElementById('google-client-id');
+        const spreadsheetUrlEl = document.getElementById('spreadsheet-url');
+
+        let tokenClient;
+        let gapiInited = false;
+        let gisInited = false;
+        let isGoogleAuthConnected = false;
+
+        const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+        const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+
+        function gapiLoaded() {
+            gapi.load('client', initializeGapiClient);
+        }
+
+        async function initializeGapiClient() {
+            const apiKey = geminiApiKeyEl.value.trim();
+             if (!apiKey) {
+                gSheetsStatus.textContent = 'Status: Kunci API Gemini diperlukan.';
+                gSheetsStatus.classList.remove('text-slate-500');
+                gSheetsStatus.classList.add('text-red-500');
+                return;
+            }
+            await gapi.client.init({
+                apiKey: apiKey,
+                discoveryDocs: DISCOVERY_DOCS,
+            });
+            gapiInited = true;
+            checkGisGapiReady();
+        }
+
+        function gisLoaded() {
+            const clientId = googleClientIdEl.value.trim();
+             if (!clientId) {
+                gSheetsStatus.textContent = 'Status: Client ID Google diperlukan.';
+                gSheetsStatus.classList.remove('text-slate-500');
+                gSheetsStatus.classList.add('text-red-500');
+                return;
+            }
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: clientId,
+                scope: SCOPES,
+                callback: (tokenResponse) => {
+                     if (tokenResponse && tokenResponse.access_token) {
+                        gapi.client.setToken(tokenResponse);
+                        isGoogleAuthConnected = true;
+                        gSheetsStatus.textContent = 'Status: Terhubung';
+                        gSheetsStatus.classList.remove('text-red-500');
+                        gSheetsStatus.classList.add('text-green-600');
+                        connectGSheetsBtn.textContent = 'Terhubung';
+                        connectGSheetsBtn.disabled = true;
+                    }
+                },
+            });
+            gisInited = true;
+            checkGisGapiReady();
+        }
+        
+        function checkGisGapiReady() {
+            if (gapiInited && gisInited) {
+                connectGSheetsBtn.disabled = false;
+            }
+        }
+        
+        connectGSheetsBtn.addEventListener('click', () => {
+            const clientId = googleClientIdEl.value.trim();
+            const apiKey = geminiApiKeyEl.value.trim();
+            if(!apiKey) {
+                 flashError(geminiApiKeyEl, "Kunci API Gemini wajib diisi untuk integrasi!");
+                 return;
+            }
+            if(!clientId) {
+                 flashError(googleClientIdEl, "Client ID Google wajib diisi!");
+                 return;
+            }
+            
+            // Re-initialize if keys change
+            initializeGapiClient();
+            gisLoaded();
+
+            if (tokenClient) {
+                tokenClient.requestAccessToken({ prompt: 'consent' });
+            }
+        });
+
+
+        async function saveToGoogleSheets(spreadsheetId, rowData) {
+            if (!isGoogleAuthConnected) {
+                console.log("Not connected to Google Sheets.");
+                gSheetsStatus.textContent = 'Status: Otorisasi diperlukan.';
+                return;
+            }
+            gSheetsStatus.textContent = 'Status: Menyimpan ke Sheet...';
+             gSheetsStatus.classList.remove('text-red-500');
+            gSheetsStatus.classList.add('text-slate-500');
+
+            try {
+                const params = {
+                    spreadsheetId: spreadsheetId,
+                    range: 'Sheet1', // Ganti jika nama sheet Anda berbeda
+                    valueInputOption: 'USER_ENTERED',
+                    insertDataOption: 'INSERT_ROWS',
+                };
+                const valueRangeBody = {
+                    'values': [rowData]
+                };
+
+                const request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
+                await request;
+                gSheetsStatus.textContent = 'Status: Berhasil disimpan!';
+                gSheetsStatus.classList.remove('text-slate-500');
+                gSheetsStatus.classList.add('text-green-600');
+                 setTimeout(() => { 
+                    gSheetsStatus.textContent = 'Status: Terhubung';
+                 }, 3000);
+
+            } catch (err) {
+                console.error("Error saving to Google Sheets:", err);
+                gSheetsStatus.textContent = `Status: Gagal menyimpan. Error: ${err.result.error.message}`;
+                gSheetsStatus.classList.remove('text-slate-500');
+                gSheetsStatus.classList.add('text-red-500');
+            }
+        }
+
+
         // Original prompt elements
         const outputIdEl = document.getElementById('prompt-output-id');
         const copyIdBtn = document.getElementById('copy-btn-id');
@@ -697,7 +852,26 @@
                 tabs.optimized.btn.classList.remove('hidden');
                 tabs.suggestion.btn.classList.remove('hidden');
                 tabs.final.btn.classList.remove('hidden');
-                switchTab('final'); // Switch to final tab to show the result
+                switchTab('final');
+
+                // Save to Google Sheets if connected
+                const spreadsheetUrl = spreadsheetUrlEl.value.trim();
+                if(isGoogleAuthConnected && spreadsheetUrl) {
+                    const spreadsheetIdMatch = spreadsheetUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+                    if (spreadsheetIdMatch && spreadsheetIdMatch[1]) {
+                        const spreadsheetId = spreadsheetIdMatch[1];
+                        const rowData = [
+                            new Date().toISOString(),
+                            finalPromptResult.final_prompt_id,
+                            finalPromptResult.final_prompt_en,
+                            finalPromptResult.content_and_hashtag_id
+                        ];
+                        await saveToGoogleSheets(spreadsheetId, rowData);
+                    } else {
+                        gSheetsStatus.textContent = 'Status: URL Google Sheet tidak valid.';
+                        gSheetsStatus.classList.add('text-red-500');
+                    }
+                }
 
             } catch (error) {
                  console.error("Error during optimization:", error);
@@ -838,6 +1012,7 @@
         // Initial setup on page load
         document.addEventListener('DOMContentLoaded', () => {
             createCharacterBlock(); // Create the first character block on page load
+            connectGSheetsBtn.disabled = true;
             
             addCharacterBtn.addEventListener('click', createCharacterBlock);
             ideateBtn.addEventListener('click', handleIdeation);
