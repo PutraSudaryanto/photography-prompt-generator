@@ -418,25 +418,7 @@
     </footer>
 
     <script>
-        const generateBtn = document.getElementById('generate-btn');
-        const clearBtn = document.getElementById('clear-btn');
-        const resultsContainer = document.getElementById('results-container');
-        const formFields = Array.from(document.querySelectorAll('.form-field'));
-        const ideateBtn = document.getElementById('ideate-btn');
-        const overallDescEl = document.getElementById('overall-desc');
-        const optimizeBtn = document.getElementById('optimize-btn');
-        const geminiApiKeyEl = document.getElementById('gemini-api-key');
-        const apiKeyError = document.getElementById('api-key-error');
-        const addCharacterBtn = document.getElementById('add-character-btn');
-        const characterContainer = document.getElementById('character-container');
-        let characterCount = 0;
-        
-        // Google Sheets Integration
-        const connectGSheetsBtn = document.getElementById('connect-g-sheets-btn');
-        const gSheetsStatus = document.getElementById('g-sheets-status');
-        const googleClientIdEl = document.getElementById('google-client-id');
-        const spreadsheetUrlEl = document.getElementById('spreadsheet-url');
-
+        // --- Global Scope for Google API ---
         let tokenClient;
         let gapiInited = false;
         let gisInited = false;
@@ -445,38 +427,33 @@
         const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
         const SCOPES = "https://www.googleapis.com/auth/spreadsheets";
 
+        // This function is called by the Google API script tag in the <head>
         function gapiLoaded() {
             gapi.load('client', initializeGapiClient);
         }
 
-        async function initializeGapiClient() {
-            const apiKey = geminiApiKeyEl.value.trim();
-             if (!apiKey) {
-                gSheetsStatus.textContent = 'Status: Kunci API Gemini diperlukan.';
-                gSheetsStatus.classList.remove('text-slate-500');
-                gSheetsStatus.classList.add('text-red-500');
-                return;
-            }
-            await gapi.client.init({
-                apiKey: apiKey,
-                discoveryDocs: DISCOVERY_DOCS,
-            });
-            gapiInited = true;
-            checkGisGapiReady();
-        }
-
+        // This function is called by the Google GSI script tag in the <head>
         function gisLoaded() {
+            const googleClientIdEl = document.getElementById('google-client-id');
+            const gSheetsStatus = document.getElementById('g-sheets-status');
             const clientId = googleClientIdEl.value.trim();
              if (!clientId) {
-                gSheetsStatus.textContent = 'Status: Client ID Google diperlukan.';
-                gSheetsStatus.classList.remove('text-slate-500');
-                gSheetsStatus.classList.add('text-red-500');
+                // We might not have the element yet, but this is a safe check
+                if(gSheetsStatus) {
+                    gSheetsStatus.textContent = 'Status: Client ID Google diperlukan.';
+                    gSheetsStatus.classList.remove('text-slate-500');
+                    gSheetsStatus.classList.add('text-red-500');
+                }
+                gisInited = true; 
+                checkGisGapiReady();
                 return;
             }
             tokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: clientId,
                 scope: SCOPES,
                 callback: (tokenResponse) => {
+                     const gSheetsStatus = document.getElementById('g-sheets-status');
+                     const connectGSheetsBtn = document.getElementById('connect-g-sheets-btn');
                      if (tokenResponse && tokenResponse.access_token) {
                         gapi.client.setToken(tokenResponse);
                         isGoogleAuthConnected = true;
@@ -491,528 +468,571 @@
             gisInited = true;
             checkGisGapiReady();
         }
+
+        async function initializeGapiClient() {
+            const geminiApiKeyEl = document.getElementById('gemini-api-key');
+            const gSheetsStatus = document.getElementById('g-sheets-status');
+            const apiKey = geminiApiKeyEl.value.trim();
+             if (!apiKey) {
+                if(gSheetsStatus) {
+                   gSheetsStatus.textContent = 'Status: Kunci API Gemini diperlukan.';
+                   gSheetsStatus.classList.remove('text-slate-500');
+                   gSheetsStatus.classList.add('text-red-500');
+                }
+                gapiInited = true;
+                checkGisGapiReady();
+                return;
+            }
+            await gapi.client.init({
+                apiKey: apiKey,
+                discoveryDocs: DISCOVERY_DOCS,
+            });
+            gapiInited = true;
+            checkGisGapiReady();
+        }
         
         function checkGisGapiReady() {
             if (gapiInited && gisInited) {
-                connectGSheetsBtn.disabled = false;
+                const connectGSheetsBtn = document.getElementById('connect-g-sheets-btn');
+                if(connectGSheetsBtn) connectGSheetsBtn.disabled = false;
             }
         }
-        
-        connectGSheetsBtn.addEventListener('click', () => {
-            const clientId = googleClientIdEl.value.trim();
-            const apiKey = geminiApiKeyEl.value.trim();
-            if(!apiKey) {
-                 flashError(geminiApiKeyEl, "Kunci API Gemini wajib diisi untuk integrasi!");
-                 return;
-            }
-            if(!clientId) {
-                 flashError(googleClientIdEl, "Client ID Google wajib diisi!");
-                 return;
+        // --- End of Global Scope ---
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const generateBtn = document.getElementById('generate-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const formFields = Array.from(document.querySelectorAll('.form-field'));
+            const ideateBtn = document.getElementById('ideate-btn');
+            const overallDescEl = document.getElementById('overall-desc');
+            const optimizeBtn = document.getElementById('optimize-btn');
+            const geminiApiKeyEl = document.getElementById('gemini-api-key');
+            const apiKeyError = document.getElementById('api-key-error');
+            const addCharacterBtn = document.getElementById('add-character-btn');
+            const characterContainer = document.getElementById('character-container');
+            let characterCount = 0;
+            
+            // Google Sheets Integration
+            const connectGSheetsBtn = document.getElementById('connect-g-sheets-btn');
+            const gSheetsStatus = document.getElementById('g-sheets-status');
+            const googleClientIdEl = document.getElementById('google-client-id');
+            const spreadsheetUrlEl = document.getElementById('spreadsheet-url');
+
+            // Original prompt elements
+            const outputIdEl = document.getElementById('prompt-output-id');
+            const copyIdBtn = document.getElementById('copy-btn-id');
+            const outputEnEl = document.getElementById('prompt-output-en');
+            const copyEnBtn = document.getElementById('copy-btn-en');
+            
+            // Tab and Panel elements
+            const allTabBtns = document.querySelectorAll('.tab-btn');
+            const allTabPanels = document.querySelectorAll('.tab-panel');
+            const tabs = {
+                original: { btn: document.getElementById('tab-original'), panel: document.getElementById('panel-original') },
+                optimized: { 
+                    btn: document.getElementById('tab-optimized'), 
+                    panel: document.getElementById('panel-optimized'),
+                    outputIdEl: document.getElementById('optimized-output-id'),
+                    outputEnEl: document.getElementById('optimized-output-en'),
+                    copyIdBtn: document.getElementById('copy-optimized-btn-id'),
+                    copyEnBtn: document.getElementById('copy-optimized-btn-en'),
+                    contentEl: document.getElementById('optimized-content-hashtag'),
+                    copyContentBtn: document.getElementById('copy-optimized-content-btn')
+                },
+                suggestion: { 
+                    btn: document.getElementById('tab-suggestion'), 
+                    panel: document.getElementById('panel-suggestion'),
+                    outputIdEl: document.getElementById('creative-suggestion-id'),
+                    outputEnEl: document.getElementById('creative-suggestion-en'),
+                    copyIdBtn: document.getElementById('copy-creative-suggestion-id'),
+                    copyEnBtn: document.getElementById('copy-creative-suggestion-en')
+                },
+                final: { 
+                    btn: document.getElementById('tab-final'), 
+                    panel: document.getElementById('panel-final'),
+                    outputIdEl: document.getElementById('final-prompt-id'),
+                    outputEnEl: document.getElementById('final-prompt-en'),
+                    copyIdBtn: document.getElementById('copy-final-prompt-id'),
+                    copyEnBtn: document.getElementById('copy-final-prompt-en'),
+                    contentEl: document.getElementById('final-content-hashtag'),
+                    copyContentBtn: document.getElementById('copy-final-content-btn')
+                }
+            };
+            
+            connectGSheetsBtn.addEventListener('click', () => {
+                const clientId = googleClientIdEl.value.trim();
+                const apiKey = geminiApiKeyEl.value.trim();
+                if(!apiKey) {
+                     flashError(geminiApiKeyEl, "Kunci API Gemini wajib diisi untuk integrasi!");
+                     return;
+                }
+                if(!clientId) {
+                     flashError(googleClientIdEl, "Client ID Google wajib diisi!");
+                     return;
+                }
+                
+                // Re-initialize if keys change
+                initializeGapiClient();
+                gisLoaded();
+
+                if (tokenClient) {
+                    tokenClient.requestAccessToken({ prompt: 'consent' });
+                }
+            });
+
+
+            async function saveToGoogleSheets(spreadsheetId, rowData) {
+                if (!isGoogleAuthConnected) {
+                    console.log("Not connected to Google Sheets.");
+                    gSheetsStatus.textContent = 'Status: Otorisasi diperlukan.';
+                    return;
+                }
+                gSheetsStatus.textContent = 'Status: Menyimpan ke Sheet...';
+                 gSheetsStatus.classList.remove('text-red-500');
+                gSheetsStatus.classList.add('text-slate-500');
+
+                try {
+                    const params = {
+                        spreadsheetId: spreadsheetId,
+                        range: 'Sheet1', // Ganti jika nama sheet Anda berbeda
+                        valueInputOption: 'USER_ENTERED',
+                        insertDataOption: 'INSERT_ROWS',
+                    };
+                    const valueRangeBody = {
+                        'values': [rowData]
+                    };
+
+                    const request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
+                    await request;
+                    gSheetsStatus.textContent = 'Status: Berhasil disimpan!';
+                    gSheetsStatus.classList.remove('text-slate-500');
+                    gSheetsStatus.classList.add('text-green-600');
+                     setTimeout(() => { 
+                        gSheetsStatus.textContent = 'Status: Terhubung';
+                     }, 3000);
+
+                } catch (err) {
+                    console.error("Error saving to Google Sheets:", err);
+                    gSheetsStatus.textContent = `Status: Gagal menyimpan. Error: ${err.result.error.message}`;
+                    gSheetsStatus.classList.remove('text-slate-500');
+                    gSheetsStatus.classList.add('text-red-500');
+                }
             }
             
-            // Re-initialize if keys change
-            initializeGapiClient();
-            gisLoaded();
-
-            if (tokenClient) {
-                tokenClient.requestAccessToken({ prompt: 'consent' });
-            }
-        });
-
-
-        async function saveToGoogleSheets(spreadsheetId, rowData) {
-            if (!isGoogleAuthConnected) {
-                console.log("Not connected to Google Sheets.");
-                gSheetsStatus.textContent = 'Status: Otorisasi diperlukan.';
-                return;
-            }
-            gSheetsStatus.textContent = 'Status: Menyimpan ke Sheet...';
-             gSheetsStatus.classList.remove('text-red-500');
-            gSheetsStatus.classList.add('text-slate-500');
-
-            try {
-                const params = {
-                    spreadsheetId: spreadsheetId,
-                    range: 'Sheet1', // Ganti jika nama sheet Anda berbeda
-                    valueInputOption: 'USER_ENTERED',
-                    insertDataOption: 'INSERT_ROWS',
-                };
-                const valueRangeBody = {
-                    'values': [rowData]
-                };
-
-                const request = gapi.client.sheets.spreadsheets.values.append(params, valueRangeBody);
-                await request;
-                gSheetsStatus.textContent = 'Status: Berhasil disimpan!';
-                gSheetsStatus.classList.remove('text-slate-500');
-                gSheetsStatus.classList.add('text-green-600');
-                 setTimeout(() => { 
-                    gSheetsStatus.textContent = 'Status: Terhubung';
-                 }, 3000);
-
-            } catch (err) {
-                console.error("Error saving to Google Sheets:", err);
-                gSheetsStatus.textContent = `Status: Gagal menyimpan. Error: ${err.result.error.message}`;
-                gSheetsStatus.classList.remove('text-slate-500');
-                gSheetsStatus.classList.add('text-red-500');
-            }
-        }
-
-
-        // Original prompt elements
-        const outputIdEl = document.getElementById('prompt-output-id');
-        const copyIdBtn = document.getElementById('copy-btn-id');
-        const outputEnEl = document.getElementById('prompt-output-en');
-        const copyEnBtn = document.getElementById('copy-btn-en');
-        
-        // Tab and Panel elements
-        const allTabBtns = document.querySelectorAll('.tab-btn');
-        const allTabPanels = document.querySelectorAll('.tab-panel');
-        const tabs = {
-            original: { btn: document.getElementById('tab-original'), panel: document.getElementById('panel-original') },
-            optimized: { 
-                btn: document.getElementById('tab-optimized'), 
-                panel: document.getElementById('panel-optimized'),
-                outputIdEl: document.getElementById('optimized-output-id'),
-                outputEnEl: document.getElementById('optimized-output-en'),
-                copyIdBtn: document.getElementById('copy-optimized-btn-id'),
-                copyEnBtn: document.getElementById('copy-optimized-btn-en'),
-                contentEl: document.getElementById('optimized-content-hashtag'),
-                copyContentBtn: document.getElementById('copy-optimized-content-btn')
-            },
-            suggestion: { 
-                btn: document.getElementById('tab-suggestion'), 
-                panel: document.getElementById('panel-suggestion'),
-                outputIdEl: document.getElementById('creative-suggestion-id'),
-                outputEnEl: document.getElementById('creative-suggestion-en'),
-                copyIdBtn: document.getElementById('copy-creative-suggestion-id'),
-                copyEnBtn: document.getElementById('copy-creative-suggestion-en')
-            },
-            final: { 
-                btn: document.getElementById('tab-final'), 
-                panel: document.getElementById('panel-final'),
-                outputIdEl: document.getElementById('final-prompt-id'),
-                outputEnEl: document.getElementById('final-prompt-en'),
-                copyIdBtn: document.getElementById('copy-final-prompt-id'),
-                copyEnBtn: document.getElementById('copy-final-prompt-en'),
-                contentEl: document.getElementById('final-content-hashtag'),
-                copyContentBtn: document.getElementById('copy-final-content-btn')
-            }
-        };
-        
-        function createCharacterBlock() {
-            characterCount++;
-            const characterBlock = document.createElement('div');
-            characterBlock.className = 'character-block border-t border-emerald-300 pt-4 mt-4';
-            characterBlock.innerHTML = `
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="font-semibold text-emerald-700">Karakter ${characterCount}</h4>
-                    ${characterCount > 1 ? '<button class="remove-character-btn text-xs bg-red-100 text-red-600 hover:bg-red-200 px-2 py-1 rounded">Hapus</button>' : ''}
-                </div>
-                <div class="space-y-5">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
-                        <div>
-                            <label for="char-gender-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Jenis Kelamin</label>
-                            <select id="char-gender-${characterCount}" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 custom-select char-gender">
-                                <option value="">-- Pilih --</option>
-                                <option value="pria">Pria</option>
-                                <option value="wanita">Wanita</option>
-                            </select>
+            function createCharacterBlock() {
+                characterCount++;
+                const characterBlock = document.createElement('div');
+                characterBlock.className = 'character-block border-t border-emerald-300 pt-4 mt-4';
+                characterBlock.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-semibold text-emerald-700">Karakter ${characterCount}</h4>
+                        ${characterCount > 1 ? '<button class="remove-character-btn text-xs bg-red-100 text-red-600 hover:bg-red-200 px-2 py-1 rounded">Hapus</button>' : ''}
+                    </div>
+                    <div class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5">
+                            <div>
+                                <label for="char-gender-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Jenis Kelamin</label>
+                                <select id="char-gender-${characterCount}" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 custom-select char-gender">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="pria">Pria</option>
+                                    <option value="wanita">Wanita</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="char-nationality-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Kewarganegaraan</label>
+                                <input id="char-nationality-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-nationality" placeholder="Contoh: Indonesia">
+                            </div>
+                            <div>
+                                <label for="char-age-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Usia</label>
+                                <input id="char-age-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-age" placeholder="Contoh: 25 tahun">
+                            </div>
                         </div>
                         <div>
-                            <label for="char-nationality-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Kewarganegaraan</label>
-                            <input id="char-nationality-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-nationality" placeholder="Contoh: Indonesia">
+                            <label for="char-features-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Ciri Fisik Utama</label>
+                            <input id="char-features-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-features" placeholder="Contoh: rambut biru, mata bersinar">
                         </div>
                         <div>
-                            <label for="char-age-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Usia</label>
-                            <input id="char-age-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-age" placeholder="Contoh: 25 tahun">
+                            <label for="char-clothing-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Pakaian & Aksesori</label>
+                            <input id="char-clothing-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-clothing" placeholder="Contoh: jaket kulit hitam, kacamata cyberpunk">
+                        </div>
+                        <div>
+                            <label for="char-action-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Aksi Utama</label>
+                            <input id="char-action-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-action" placeholder="Contoh: membaca buku kuno, melihat ke kejauhan">
                         </div>
                     </div>
-                    <div>
-                        <label for="char-features-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Ciri Fisik Utama</label>
-                        <input id="char-features-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-features" placeholder="Contoh: rambut biru, mata bersinar">
-                    </div>
-                    <div>
-                        <label for="char-clothing-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Pakaian & Aksesori</label>
-                        <input id="char-clothing-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-clothing" placeholder="Contoh: jaket kulit hitam, kacamata cyberpunk">
-                    </div>
-                    <div>
-                        <label for="char-action-${characterCount}" class="block text-sm font-medium mb-2 text-emerald-600">Aksi Utama</label>
-                        <input id="char-action-${characterCount}" type="text" class="form-field w-full border-2 rounded-lg py-2 px-4 placeholder-slate-400 focus:outline-none focus:ring-2 transition-all duration-300 bg-white border-emerald-300 text-emerald-900 focus:ring-emerald-500/50 focus:border-emerald-500 char-action" placeholder="Contoh: membaca buku kuno, melihat ke kejauhan">
-                    </div>
-                </div>
-            `;
-            characterContainer.appendChild(characterBlock);
-            if (characterCount > 1) {
-                characterBlock.querySelector('.remove-character-btn').addEventListener('click', () => {
-                    characterBlock.remove();
+                `;
+                characterContainer.appendChild(characterBlock);
+                if (characterCount > 1) {
+                    characterBlock.querySelector('.remove-character-btn').addEventListener('click', () => {
+                        characterBlock.remove();
+                    });
+                }
+            }
+            
+            function switchTab(targetTabId) {
+                allTabBtns.forEach(btn => {
+                    const isTarget = btn.id === `tab-${targetTabId}`;
+                    btn.classList.toggle('border-teal-500', isTarget);
+                    btn.classList.toggle('text-teal-600', isTarget);
+                    btn.classList.toggle('border-transparent', !isTarget);
+                    btn.classList.toggle('text-slate-500', !isTarget);
+                    btn.classList.toggle('hover:text-slate-700', !isTarget);
+                    btn.classList.toggle('hover:border-slate-300', !isTarget);
+                });
+                allTabPanels.forEach(panel => {
+                    panel.classList.toggle('hidden', panel.id !== `panel-${targetTabId}`);
                 });
             }
-        }
-        
-        function switchTab(targetTabId) {
-            allTabBtns.forEach(btn => {
-                const isTarget = btn.id === `tab-${targetTabId}`;
-                btn.classList.toggle('border-teal-500', isTarget);
-                btn.classList.toggle('text-teal-600', isTarget);
-                btn.classList.toggle('border-transparent', !isTarget);
-                btn.classList.toggle('text-slate-500', !isTarget);
-                btn.classList.toggle('hover:text-slate-700', !isTarget);
-                btn.classList.toggle('hover:border-slate-300', !isTarget);
-            });
-            allTabPanels.forEach(panel => {
-                panel.classList.toggle('hidden', panel.id !== `panel-${targetTabId}`);
-            });
-        }
 
-        function toggleActionButtonsVisibility() {
-            const isAnyFieldFilled = formFields.some(field => field.value.trim() !== '');
-            clearBtn.classList.toggle('hidden', !isAnyFieldFilled);
+            function toggleActionButtonsVisibility() {
+                const isAnyFieldFilled = formFields.some(field => field.value.trim() !== '');
+                clearBtn.classList.toggle('hidden', !isAnyFieldFilled);
+                
+                const isResultVisible = !resultsContainer.classList.contains('hidden');
+                optimizeBtn.classList.toggle('hidden', !isResultVisible);
+            }
             
-            const isResultVisible = !resultsContainer.classList.contains('hidden');
-            optimizeBtn.classList.toggle('hidden', !isResultVisible);
-        }
-        
-        async function callGeminiAPI(prompt, apiKey, jsonSchema = null) {
-             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-             const payload = { 
-                contents: chatHistory,
-                generationConfig: {}
-             };
+            async function callGeminiAPI(prompt, apiKey, jsonSchema = null) {
+                 let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                 const payload = { 
+                    contents: chatHistory,
+                    generationConfig: {}
+                 };
 
-             if (jsonSchema) {
-                 payload.generationConfig.responseMimeType = "application/json";
-                 payload.generationConfig.responseSchema = jsonSchema;
-             }
-             
-             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-             
-             const response = await fetch(apiUrl, {
-                 method: 'POST',
-                 headers: { 'Content-Type': 'application/json' },
-                 body: JSON.stringify(payload)
-             });
+                 if (jsonSchema) {
+                     payload.generationConfig.responseMimeType = "application/json";
+                     payload.generationConfig.responseSchema = jsonSchema;
+                 }
+                 
+                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                 
+                 const response = await fetch(apiUrl, {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify(payload)
+                 });
 
-             if (!response.ok) {
-                 const errorBody = await response.json();
-                 console.error("API Error Response:", errorBody);
-                 throw new Error(`HTTP error! status: ${response.status}`);
-             }
+                 if (!response.ok) {
+                     const errorBody = await response.json();
+                     console.error("API Error Response:", errorBody);
+                     throw new Error(`HTTP error! status: ${response.status}`);
+                 }
 
-             const result = await response.json();
-             
-             if (result.candidates && result.candidates.length > 0 &&
-                 result.candidates[0].content && result.candidates[0].content.parts &&
-                 result.candidates[0].content.parts.length > 0) {
-                 const responseText = result.candidates[0].content.parts[0].text;
-                 return jsonSchema ? JSON.parse(responseText) : responseText.trim();
-             } else {
-                 console.error("Struktur respons tidak terduga:", result);
-                 throw new Error("Gagal mendapatkan konten dari respons API.");
-             }
-        }
-        
-        function flashError(element, message) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            if (element.tagName === 'P') {
-                element.classList.remove('hidden');
-                setTimeout(() => {
-                    element.classList.add('hidden');
-                }, 3000);
-            } else {
-                const originalPlaceholder = element.placeholder;
-                element.placeholder = message;
-                element.classList.add('border-red-500', 'focus:ring-red-500/50');
-                setTimeout(() => {
-                    element.placeholder = originalPlaceholder;
-                    element.classList.remove('border-red-500', 'focus:ring-red-500/50');
-                }, 3000);
+                 const result = await response.json();
+                 
+                 if (result.candidates && result.candidates.length > 0 &&
+                     result.candidates[0].content && result.candidates[0].content.parts &&
+                     result.candidates[0].content.parts.length > 0) {
+                     const responseText = result.candidates[0].content.parts[0].text;
+                     return jsonSchema ? JSON.parse(responseText) : responseText.trim();
+                 } else {
+                     console.error("Struktur respons tidak terduga:", result);
+                     throw new Error("Gagal mendapatkan konten dari respons API.");
+                 }
             }
-        }
-
-        async function handleIdeation() {
-            const userApiKey = geminiApiKeyEl.value.trim();
-            if (!userApiKey) {
-                flashError(geminiApiKeyEl, "Kunci API wajib diisi!");
-                return;
-            }
-
-            const ideateIcon = document.getElementById('ideate-icon');
-            const ideateLoader = document.getElementById('ideate-loader');
-            const ideateBtnText = document.getElementById('ideate-btn-text');
-            const initialDescription = overallDescEl.value.trim();
-
-            if (!initialDescription) {
-                flashError(overallDescEl, "Tulis ide awal Anda di sini terlebih dahulu!");
-                return;
-            }
-
-            const prompt = `Kembangkan deskripsi foto ini menjadi satu kalimat yang lebih puitis, imajinatif, dan sinematik: "${initialDescription}". Hanya berikan kalimat deskripsinya saja tanpa tambahan apapun.`;
             
-            ideateBtn.disabled = true;
-            ideateIcon.style.display = 'none';
-            ideateBtnText.style.display = 'none';
-            ideateLoader.classList.remove('hidden');
-
-            try {
-                const optimizedText = await callGeminiAPI(prompt, userApiKey);
-                overallDescEl.value = optimizedText;
-            } catch (error) {
-                console.error("Error during API call:", error);
-                flashError(overallDescEl, "Terjadi kesalahan. Periksa koneksi atau coba lagi nanti.");
-            } finally {
-                ideateBtn.disabled = false;
-                ideateIcon.style.display = 'inline';
-                ideateBtnText.style.display = 'inline';
-                ideateLoader.classList.add('hidden');
+            function flashError(element, message) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                if (element.tagName === 'P') {
+                    element.classList.remove('hidden');
+                    setTimeout(() => {
+                        element.classList.add('hidden');
+                    }, 3000);
+                } else {
+                    const originalPlaceholder = element.placeholder;
+                    element.placeholder = message;
+                    element.classList.add('border-red-500', 'focus:ring-red-500/50');
+                    setTimeout(() => {
+                        element.placeholder = originalPlaceholder;
+                        element.classList.remove('border-red-500', 'focus:ring-red-500/50');
+                    }, 3000);
+                }
             }
-        }
 
-        async function handleOptimization() {
-            const userApiKey = geminiApiKeyEl.value.trim();
-            if (!userApiKey) {
-                flashError(apiKeyError, "Kunci API wajib diisi untuk optimasi!");
-                return;
+            async function handleIdeation() {
+                const userApiKey = geminiApiKeyEl.value.trim();
+                if (!userApiKey) {
+                    flashError(geminiApiKeyEl, "Kunci API wajib diisi!");
+                    return;
+                }
+
+                const ideateIcon = document.getElementById('ideate-icon');
+                const ideateLoader = document.getElementById('ideate-loader');
+                const ideateBtnText = document.getElementById('ideate-btn-text');
+                const initialDescription = overallDescEl.value.trim();
+
+                if (!initialDescription) {
+                    flashError(overallDescEl, "Tulis ide awal Anda di sini terlebih dahulu!");
+                    return;
+                }
+
+                const prompt = `Kembangkan deskripsi foto ini menjadi satu kalimat yang lebih puitis, imajinatif, dan sinematik: "${initialDescription}". Hanya berikan kalimat deskripsinya saja tanpa tambahan apapun.`;
+                
+                ideateBtn.disabled = true;
+                ideateIcon.style.display = 'none';
+                ideateBtnText.style.display = 'none';
+                ideateLoader.classList.remove('hidden');
+
+                try {
+                    const optimizedText = await callGeminiAPI(prompt, userApiKey);
+                    overallDescEl.value = optimizedText;
+                } catch (error) {
+                    console.error("Error during API call:", error);
+                    flashError(overallDescEl, "Terjadi kesalahan. Periksa koneksi atau coba lagi nanti.");
+                } finally {
+                    ideateBtn.disabled = false;
+                    ideateIcon.style.display = 'inline';
+                    ideateBtnText.style.display = 'inline';
+                    ideateLoader.classList.add('hidden');
+                }
             }
-            apiKeyError.classList.add('hidden');
 
-            const optimizeBtnText = document.getElementById('optimize-btn-text');
-            const optimizeIcon = document.getElementById('optimize-icon');
-            const optimizeLoader = document.getElementById('optimize-loader');
-            const originalPromptEn = outputEnEl.value;
+            async function handleOptimization() {
+                const userApiKey = geminiApiKeyEl.value.trim();
+                if (!userApiKey) {
+                    flashError(apiKeyError, "Kunci API wajib diisi untuk optimasi!");
+                    return;
+                }
+                apiKeyError.classList.add('hidden');
 
-            if (!originalPromptEn.trim()) return;
+                const optimizeBtnText = document.getElementById('optimize-btn-text');
+                const optimizeIcon = document.getElementById('optimize-icon');
+                const optimizeLoader = document.getElementById('optimize-loader');
+                const originalPromptEn = outputEnEl.value;
 
-            optimizeBtn.disabled = true;
-            optimizeBtnText.style.display = 'none';
-            optimizeIcon.style.display = 'none';
-            optimizeLoader.classList.remove('hidden');
-            
-            try {
-                // First API Call: Get optimization, suggestion, and content
-                const optimizationPrompt = `
-                    Analisis prompt gambar berikut dan lakukan tugas-tugas ini:
-                    1. Optimalkan prompt agar lebih deskriptif, detail, dan puitis untuk AI text-to-image seperti Midjourney (dalam Bahasa Inggris).
-                    2. Terjemahkan prompt yang telah dioptimalkan ke dalam Bahasa Indonesia yang alami dan deskriptif.
-                    3. Berikan satu saran kreatif yang singkat untuk membuat prompt lebih unik (seperti elemen tak terduga, mood, atau detail artistik) untuk membuatnya lebih menarik (dalam Bahasa Inggris).
-                    4. Terjemahkan saran kreatif tersebut ke dalam Bahasa Indonesia.
-                    5. Berdasarkan prompt yang telah dioptimalkan, buatlah caption media sosial yang menarik dan daftar hashtag yang relevan (dalam Bahasa Indonesia). Gabungkan caption dan hashtag ke dalam satu string teks. caption tidak menggunakan icon atau emotion, gunakan huruf kecil untuk setiap hastag, hastag menggunakan baris yang berbeda dengan isi body konten.
-                    
-                    Prompt Asli: "${originalPromptEn}"
-                    
-                    Kembalikan hasilnya HANYA dalam format JSON berikut. Jangan tambahkan teks atau penjelasan lain.
-                `;
-                const optimizationSchema = {
-                  "type": "OBJECT",
-                  "properties": {
-                    "optimized_en": { "type": "STRING" },
-                    "optimized_id": { "type": "STRING" },
-                    "suggestion_en": { "type": "STRING" },
-                    "suggestion_id": { "type": "STRING" },
-                    "content_and_hashtag_id": { "type": "STRING" }
-                  },
-                   "required": ["optimized_en", "optimized_id", "suggestion_en", "suggestion_id", "content_and_hashtag_id"]
-                };
-                const optimizationResult = await callGeminiAPI(optimizationPrompt, userApiKey, optimizationSchema);
+                if (!originalPromptEn.trim()) return;
 
-                tabs.optimized.outputEnEl.value = optimizationResult.optimized_en;
-                tabs.optimized.outputIdEl.value = optimizationResult.optimized_id;
-                tabs.optimized.contentEl.value = optimizationResult.content_and_hashtag_id;
-                tabs.suggestion.outputEnEl.value = optimizationResult.suggestion_en;
-                tabs.suggestion.outputIdEl.value = optimizationResult.suggestion_id;
+                optimizeBtn.disabled = true;
+                optimizeBtnText.style.display = 'none';
+                optimizeIcon.style.display = 'none';
+                optimizeLoader.classList.remove('hidden');
+                
+                try {
+                    // First API Call: Get optimization, suggestion, and content
+                    const optimizationPrompt = `
+                        Analisis prompt gambar berikut dan lakukan tugas-tugas ini:
+                        1. Optimalkan prompt agar lebih deskriptif, detail, dan puitis untuk AI text-to-image seperti Midjourney (dalam Bahasa Inggris).
+                        2. Terjemahkan prompt yang telah dioptimalkan ke dalam Bahasa Indonesia yang alami dan deskriptif.
+                        3. Berikan satu saran kreatif yang singkat untuk membuat prompt lebih unik (dalam Bahasa Inggris).
+                        4. Terjemahkan saran kreatif tersebut ke dalam Bahasa Indonesia.
+                        5. Berdasarkan prompt yang telah dioptimalkan, buatlah caption media sosial yang menarik dan daftar hashtag yang relevan (dalam Bahasa Indonesia). Gabungkan caption dan hashtag ke dalam satu string teks.
+                        
+                        Prompt Asli: "${originalPromptEn}"
+                        
+                        Kembalikan hasilnya HANYA dalam format JSON berikut. Jangan tambahkan teks atau penjelasan lain.
+                    `;
+                    const optimizationSchema = {
+                      "type": "OBJECT",
+                      "properties": {
+                        "optimized_en": { "type": "STRING" },
+                        "optimized_id": { "type": "STRING" },
+                        "suggestion_en": { "type": "STRING" },
+                        "suggestion_id": { "type": "STRING" },
+                        "content_and_hashtag_id": { "type": "STRING" }
+                      },
+                       "required": ["optimized_en", "optimized_id", "suggestion_en", "suggestion_id", "content_and_hashtag_id"]
+                    };
+                    const optimizationResult = await callGeminiAPI(optimizationPrompt, userApiKey, optimizationSchema);
 
-                // Second API Call: Generate the final prompt and its content
-                const finalPromptGenPrompt = `
-                    Berdasarkan prompt yang telah dioptimalkan dan saran kreatif berikut, lakukan tugas-tugas ini:
-                    1. Buat prompt final yang terpadu dan kohesif untuk generator gambar AI, dengan mengintegrasikan saran ke dalam deskripsi utama (dalam Bahasa Inggris).
-                    2. Terjemahkan prompt final gabungan ini ke dalam Bahasa Indonesia yang alami dan deskriptif.
-                    3. Berdasarkan prompt final tersebut, buatlah caption media sosial baru yang menarik dan daftar hashtag yang relevan (dalam Bahasa Indonesia). Gabungkan caption dan hashtag ke dalam satu string teks. caption tidak menggunakan icon atau emotion, gunakan huruf kecil untuk setiap hastag, hastag menggunakan baris yang berbeda dengan isi body konten.
+                    tabs.optimized.outputEnEl.value = optimizationResult.optimized_en;
+                    tabs.optimized.outputIdEl.value = optimizationResult.optimized_id;
+                    tabs.optimized.contentEl.value = optimizationResult.content_and_hashtag_id;
+                    tabs.suggestion.outputEnEl.value = optimizationResult.suggestion_en;
+                    tabs.suggestion.outputIdEl.value = optimizationResult.suggestion_id;
 
-                    Prompt Optimal: "${optimizationResult.optimized_en}"
-                    Saran Kreatif: "${optimizationResult.suggestion_en}"
+                    // Second API Call: Generate the final prompt and its content
+                    const finalPromptGenPrompt = `
+                        Berdasarkan prompt yang telah dioptimalkan dan saran kreatif berikut, lakukan tugas-tugas ini:
+                        1. Buat prompt final yang terpadu dan kohesif untuk generator gambar AI, dengan mengintegrasikan saran ke dalam deskripsi utama (dalam Bahasa Inggris).
+                        2. Terjemahkan prompt final gabungan ini ke dalam Bahasa Indonesia yang alami dan deskriptif.
+                        3. Berdasarkan prompt final tersebut, buatlah caption media sosial baru yang menarik dan daftar hashtag yang relevan (dalam Bahasa Indonesia). Gabungkan caption dan hashtag ke dalam satu string teks.
 
-                    Kembalikan hasilnya HANYA dalam format JSON berikut. Jangan tambahkan teks atau penjelasan lain.
-                `;
-                const finalPromptSchema = {
-                  "type": "OBJECT",
-                  "properties": {
-                    "final_prompt_en": { "type": "STRING" },
-                    "final_prompt_id": { "type": "STRING" },
-                    "content_and_hashtag_id": { "type": "STRING" }
-                  },
-                   "required": ["final_prompt_en", "final_prompt_id", "content_and_hashtag_id"]
-                };
-                const finalPromptResult = await callGeminiAPI(finalPromptGenPrompt, userApiKey, finalPromptSchema);
+                        Prompt Optimal: "${optimizationResult.optimized_en}"
+                        Saran Kreatif: "${optimizationResult.suggestion_en}"
 
-                tabs.final.outputEnEl.value = finalPromptResult.final_prompt_en;
-                tabs.final.outputIdEl.value = finalPromptResult.final_prompt_id;
-                tabs.final.contentEl.value = finalPromptResult.content_and_hashtag_id;
+                        Kembalikan hasilnya HANYA dalam format JSON berikut. Jangan tambahkan teks atau penjelasan lain.
+                    `;
+                    const finalPromptSchema = {
+                      "type": "OBJECT",
+                      "properties": {
+                        "final_prompt_en": { "type": "STRING" },
+                        "final_prompt_id": { "type": "STRING" },
+                        "content_and_hashtag_id": { "type": "STRING" }
+                      },
+                       "required": ["final_prompt_en", "final_prompt_id", "content_and_hashtag_id"]
+                    };
+                    const finalPromptResult = await callGeminiAPI(finalPromptGenPrompt, userApiKey, finalPromptSchema);
 
-                // Update UI
-                tabs.optimized.btn.classList.remove('hidden');
-                tabs.suggestion.btn.classList.remove('hidden');
-                tabs.final.btn.classList.remove('hidden');
-                switchTab('final');
+                    tabs.final.outputEnEl.value = finalPromptResult.final_prompt_en;
+                    tabs.final.outputIdEl.value = finalPromptResult.final_prompt_id;
+                    tabs.final.contentEl.value = finalPromptResult.content_and_hashtag_id;
 
-                // Save to Google Sheets if connected
-                const spreadsheetUrl = spreadsheetUrlEl.value.trim();
-                if(isGoogleAuthConnected && spreadsheetUrl) {
-                    const spreadsheetIdMatch = spreadsheetUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
-                    if (spreadsheetIdMatch && spreadsheetIdMatch[1]) {
-                        const spreadsheetId = spreadsheetIdMatch[1];
-                        const rowData = [
-                            new Date().toISOString(),
-                            finalPromptResult.final_prompt_id,
-                            finalPromptResult.final_prompt_en,
-                            finalPromptResult.content_and_hashtag_id
-                        ];
-                        await saveToGoogleSheets(spreadsheetId, rowData);
-                    } else {
-                        gSheetsStatus.textContent = 'Status: URL Google Sheet tidak valid.';
-                        gSheetsStatus.classList.add('text-red-500');
+                    // Update UI
+                    tabs.optimized.btn.classList.remove('hidden');
+                    tabs.suggestion.btn.classList.remove('hidden');
+                    tabs.final.btn.classList.remove('hidden');
+                    switchTab('final');
+
+                    // Save to Google Sheets if connected
+                    const spreadsheetUrl = spreadsheetUrlEl.value.trim();
+                    if(isGoogleAuthConnected && spreadsheetUrl) {
+                        const spreadsheetIdMatch = spreadsheetUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+                        if (spreadsheetIdMatch && spreadsheetIdMatch[1]) {
+                            const spreadsheetId = spreadsheetIdMatch[1];
+                            const rowData = [
+                                new Date().toISOString(),
+                                finalPromptResult.final_prompt_id,
+                                finalPromptResult.final_prompt_en,
+                                finalPromptResult.content_and_hashtag_id
+                            ];
+                            await saveToGoogleSheets(spreadsheetId, rowData);
+                        } else {
+                            gSheetsStatus.textContent = 'Status: URL Google Sheet tidak valid.';
+                            gSheetsStatus.classList.add('text-red-500');
+                        }
                     }
+
+                } catch (error) {
+                     console.error("Error during optimization:", error);
+                     flashError(apiKeyError, 'Gagal mengoptimalkan. Cek Kunci API Anda.');
+                } finally {
+                    optimizeBtn.disabled = false;
+                    optimizeBtnText.style.display = 'inline';
+                    optimizeIcon.style.display = 'inline';
+                    optimizeLoader.classList.add('hidden');
+                }
+            }
+
+            async function generatePrompt() {
+                const userApiKey = geminiApiKeyEl.value.trim();
+                if (!userApiKey) {
+                    flashError(geminiApiKeyEl, "Kunci API wajib diisi untuk menerjemahkan!");
+                    return;
+                }
+                apiKeyError.classList.add('hidden');
+
+                const overallDesc = overallDescEl.value.trim();
+                if (!overallDesc) {
+                    flashError(overallDescEl, "Latar belakang wajib diisi!");
+                    return;
                 }
 
-            } catch (error) {
-                 console.error("Error during optimization:", error);
-                 flashError(apiKeyError, 'Gagal mengoptimalkan. Cek Kunci API Anda.');
-            } finally {
-                optimizeBtn.disabled = false;
-                optimizeBtnText.style.display = 'inline';
-                optimizeIcon.style.display = 'inline';
-                optimizeLoader.classList.add('hidden');
-            }
-        }
+                const characterBlocks = document.querySelectorAll('.character-block');
+                let charactersID = [];
+                
+                characterBlocks.forEach(block => {
+                    const charFields = {
+                        nationality: block.querySelector('.char-nationality').value.trim(),
+                        age: block.querySelector('.char-age').value.trim(),
+                        gender: block.querySelector('.char-gender').value.trim(),
+                        features: block.querySelector('.char-features').value.trim(),
+                        clothing: block.querySelector('.char-clothing').value.trim(),
+                        action: block.querySelector('.char-action').value.trim(),
+                    };
+                    if (Object.values(charFields).some(field => field !== '')) {
+                        let subjectID = `seorang karakter ${charFields.gender || ''} ${charFields.nationality || ''} ${charFields.age || ''}`.replace(/\s+/g, ' ').trim();
+                        let details_id = [];
+                        if(charFields.features) details_id.push(`dengan ${charFields.features}`);
+                        if(charFields.clothing) details_id.push(`mengenakan ${charFields.clothing}`);
+                        if(charFields.action) details_id.push(`sedang ${charFields.action}`);
+                        if(details_id.length > 0) subjectID += `, ${details_id.join(', ')}`;
+                        charactersID.push(subjectID);
+                    }
+                });
+                
+                const sceneText = document.getElementById('scene').value.trim();
+                let mainSubjectID = charactersID.join(' dan ');
 
-        async function generatePrompt() {
-            const userApiKey = geminiApiKeyEl.value.trim();
-            if (!userApiKey) {
-                flashError(geminiApiKeyEl, "Kunci API wajib diisi untuk menerjemahkan!");
-                return;
-            }
-            apiKeyError.classList.add('hidden');
-
-            const overallDesc = overallDescEl.value.trim();
-            if (!overallDesc) {
-                flashError(overallDescEl, "Latar belakang wajib diisi!");
-                return;
-            }
-
-            const characterBlocks = document.querySelectorAll('.character-block');
-            let charactersID = [];
-            
-            characterBlocks.forEach(block => {
-                const charFields = {
-                    nationality: block.querySelector('.char-nationality').value.trim(),
-                    age: block.querySelector('.char-age').value.trim(),
-                    gender: block.querySelector('.char-gender').value.trim(),
-                    features: block.querySelector('.char-features').value.trim(),
-                    clothing: block.querySelector('.char-clothing').value.trim(),
-                    action: block.querySelector('.char-action').value.trim(),
-                };
-                if (Object.values(charFields).some(field => field !== '')) {
-                    let subjectID = `seorang karakter ${charFields.gender || ''} ${charFields.nationality || ''} ${charFields.age || ''}`.replace(/\s+/g, ' ').trim();
-                    let details_id = [];
-                    if(charFields.features) details_id.push(`dengan ${charFields.features}`);
-                    if(charFields.clothing) details_id.push(`mengenakan ${charFields.clothing}`);
-                    if(charFields.action) details_id.push(`sedang ${charFields.action}`);
-                    if(details_id.length > 0) subjectID += `, ${details_id.join(', ')}`;
-                    charactersID.push(subjectID);
+                if (sceneText) {
+                    if (mainSubjectID) mainSubjectID = `${mainSubjectID} ${sceneText}`; else mainSubjectID = sceneText;
                 }
-            });
-            
-            const sceneText = document.getElementById('scene').value.trim();
-            let mainSubjectID = charactersID.join(' dan ');
+                
+                const finalSubjectID = overallDesc ? `${overallDesc}. ${mainSubjectID}` : mainSubjectID;
 
-            if (sceneText) {
-                if (mainSubjectID) mainSubjectID = `${sceneText} ${mainSubjectID}`; else mainSubjectID = sceneText;
+                const promptPartsID_desc = [finalSubjectID].filter(Boolean);
+
+                const detailsText = document.getElementById('details').value.trim();
+                if (detailsText) {
+                    promptPartsID_desc.push(detailsText);
+                }
+
+                document.querySelectorAll('#style, #lighting, #shot-style, #camera-angle, #focus, #camera').forEach(el => {
+                    if (el.options && el.selectedIndex > 0) {
+                        const selectedText = el.options[el.selectedIndex].value;
+                        promptPartsID_desc.push(selectedText);
+                    }
+                });
+
+                let finalIdPrompt = promptPartsID_desc.join(', ');
+                outputIdEl.value = finalIdPrompt;
+                
+                generateBtn.disabled = true;
+                generateBtn.textContent = 'Menerjemahkan...';
+
+                try {
+                    const translationPrompt = `Translate the following descriptive photo prompt to English. The translation should be natural and suitable for an AI image generator. Only return the translated prompt. Original: "${finalIdPrompt}"`;
+                    let finalEnPrompt = await callGeminiAPI(translationPrompt, userApiKey);
+                    const resolution = document.getElementById('resolution').value;
+                    if(resolution) {
+                        finalEnPrompt += `, ${resolution}`;
+                    }
+                    outputEnEl.value = finalEnPrompt;
+
+                    resultsContainer.classList.remove('hidden');
+                    resultsContainer.classList.add('animate-fade-in');
+                    tabs.optimized.btn.classList.add('hidden');
+                    tabs.suggestion.btn.classList.add('hidden');
+                    tabs.final.btn.classList.add('hidden');
+                    switchTab('original');
+
+                } catch (error) {
+                    console.error("Translation Error:", error);
+                    outputEnEl.value = "Gagal menerjemahkan. Silakan periksa Kunci API Anda.";
+                } finally {
+                    generateBtn.disabled = false;
+                    generateBtn.textContent = 'Buat Prompt!';
+                    toggleActionButtonsVisibility();
+                }
             }
             
-            const finalSubjectID = overallDesc ? `${overallDesc}. ${mainSubjectID}` : mainSubjectID;
-
-            const promptPartsID_desc = [finalSubjectID].filter(Boolean);
-
-            const detailsText = document.getElementById('details').value.trim();
-            if (detailsText) {
-                promptPartsID_desc.push(detailsText);
-            }
-
-            document.querySelectorAll('#style, #lighting, #shot-style, #camera-angle, #focus, #camera').forEach(el => {
-                if (el.options && el.selectedIndex > 0) {
-                    const selectedText = el.options[el.selectedIndex].value;
-                    promptPartsID_desc.push(selectedText);
-                }
-            });
-
-            let finalIdPrompt = promptPartsID_desc.join(', ');
-            outputIdEl.value = finalIdPrompt;
-            
-            generateBtn.disabled = true;
-            generateBtn.textContent = 'Menerjemahkan...';
-
-            try {
-                const translationPrompt = `Translate the following descriptive photo prompt to English. The translation should be natural and suitable for an AI image generator. Only return the translated prompt. Original: "${finalIdPrompt}"`;
-                let finalEnPrompt = await callGeminiAPI(translationPrompt, userApiKey);
-                const resolution = document.getElementById('resolution').value;
-                if(resolution) {
-                    finalEnPrompt += `, ${resolution}`;
-                }
-                outputEnEl.value = finalEnPrompt;
-
-                resultsContainer.classList.remove('hidden');
-                resultsContainer.classList.add('animate-fade-in');
-                tabs.optimized.btn.classList.add('hidden');
-                tabs.suggestion.btn.classList.add('hidden');
-                tabs.final.btn.classList.add('hidden');
-                switchTab('original');
-
-            } catch (error) {
-                console.error("Translation Error:", error);
-                outputEnEl.value = "Gagal menerjemahkan. Silakan periksa Kunci API Anda.";
-            } finally {
-                generateBtn.disabled = false;
-                generateBtn.textContent = 'Buat Prompt!';
+            function clearFields() {
+                characterContainer.innerHTML = '';
+                createCharacterBlock();
+                formFields.forEach(field => { 
+                    if(!field.closest('.character-block')) field.value = ''; 
+                });
+                outputIdEl.value = '';
+                outputEnEl.value = '';
+                // Clear all other textareas
+                Object.values(tabs).forEach(tab => {
+                    if(tab.outputIdEl) tab.outputIdEl.value = '';
+                    if(tab.outputEnEl) tab.outputEnEl.value = '';
+                    if(tab.contentEl) tab.contentEl.value = '';
+                });
+                resultsContainer.classList.add('hidden');
                 toggleActionButtonsVisibility();
             }
-        }
-        
-        function clearFields() {
-            characterContainer.innerHTML = '';
-            createCharacterBlock();
-            formFields.forEach(field => { 
-                if(!field.closest('.character-block')) field.value = ''; 
-            });
-            outputIdEl.value = '';
-            outputEnEl.value = '';
-            // Clear all other textareas
-            Object.values(tabs).forEach(tab => {
-                if(tab.outputIdEl) tab.outputIdEl.value = '';
-                if(tab.outputEnEl) tab.outputEnEl.value = '';
-                if(tab.contentEl) tab.contentEl.value = '';
-            });
-            resultsContainer.classList.add('hidden');
-            toggleActionButtonsVisibility();
-        }
 
-        function copyToClipboard(outputElement, buttonElement) {
-            if(!outputElement.value) return;
-            outputElement.select();
-            outputElement.setSelectionRange(0, 99999); 
-            try {
-                document.execCommand('copy');
-                buttonElement.textContent = 'Disalin!';
-                setTimeout(() => { buttonElement.textContent = 'Salin'; }, 2000);
-            } catch (err) {
-                console.error('Gagal menyalin teks: ', err);
-                buttonElement.textContent = 'Gagal';
-                setTimeout(() => { buttonElement.textContent = 'Salin'; }, 2000);
+            function copyToClipboard(outputElement, buttonElement) {
+                if(!outputElement.value) return;
+                outputElement.select();
+                outputElement.setSelectionRange(0, 99999); 
+                try {
+                    document.execCommand('copy');
+                    buttonElement.textContent = 'Disalin!';
+                    setTimeout(() => { buttonElement.textContent = 'Salin'; }, 2000);
+                } catch (err) {
+                    console.error('Gagal menyalin teks: ', err);
+                    buttonElement.textContent = 'Gagal';
+                    setTimeout(() => { buttonElement.textContent = 'Salin'; }, 2000);
+                }
             }
-        }
 
-        // Initial setup on page load
-        document.addEventListener('DOMContentLoaded', () => {
+            // Initial setup on page load
             createCharacterBlock(); // Create the first character block on page load
-            connectGSheetsBtn.disabled = true;
+            if (connectGSheetsBtn) connectGSheetsBtn.disabled = true;
             
             addCharacterBtn.addEventListener('click', createCharacterBlock);
             ideateBtn.addEventListener('click', handleIdeation);
