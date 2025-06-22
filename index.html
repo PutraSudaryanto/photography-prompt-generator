@@ -881,6 +881,7 @@
                         const spreadsheetIdMatch = spreadsheetUrl.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
                         if (spreadsheetIdMatch && spreadsheetIdMatch[1]) {
                             const spreadsheetId = spreadsheetIdMatch[1];
+                            console.error("spreadsheetId:", spreadsheetId);
                             const rowData = [
                                 new Date().toISOString(),
                                 finalPromptResult.final_prompt_id,
